@@ -1,698 +1,1101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hubmend — Find Any Service, Anywhere</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/main.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hubmend — Book Any Expert, Anywhere</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0057FF;--blue-dark:#003FBB;--blue-light:#EBF1FF;
+  --orange:#FF6B00;--orange-light:#FFF3EB;
+  --green:#00A550;--green-light:#E8F7EE;
+  --red:#E53935;--red-light:#FEECEC;
+  --gold:#F59E0B;
+  --gray-50:#F8F9FA;--gray-100:#F0F2F5;--gray-200:#E4E7ED;
+  --gray-300:#CDD1DA;--gray-400:#9CA3AF;--gray-500:#6B7280;
+  --gray-700:#374151;--gray-800:#1F2937;--gray-900:#111827;
+  --white:#FFFFFF;
+  --font:'Plus Jakarta Sans',sans-serif;
+  --serif:'Fraunces',serif;
+  --r4:4px;--r8:8px;--r12:12px;--r16:16px;--r24:24px;--r50:50px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow:0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.12);
+  --transition:.2s ease;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);color:var(--gray-800);background:var(--white);line-height:1.6;overflow-x:hidden}
+.page{display:none;min-height:100vh;padding-top:72px}
+.page.active{display:block}
+#pg-admin{padding-top:0}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:9000;background:var(--white);border-bottom:1px solid var(--gray-200);height:72px}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:20px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
+.logo-mark{width:36px;height:36px;background:var(--blue);border-radius:var(--r8);display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round}
+.logo-text{font-family:var(--serif);font-size:22px;font-weight:800;color:var(--gray-900)}
+.logo-text span{color:var(--blue)}
+.nav-search{flex:1;max-width:440px;position:relative}
+.nav-search input{width:100%;height:40px;border:1.5px solid var(--gray-200);border-radius:var(--r50);padding:0 16px 0 42px;font-size:14px;font-family:var(--font);outline:none;transition:var(--transition);background:var(--gray-50)}
+.nav-search input:focus{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(0,87,255,.1)}
+.nav-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;opacity:.4}
+.nav-links{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nav-link{font-size:14px;font-weight:500;color:var(--gray-600);padding:8px 12px;border-radius:var(--r8);transition:var(--transition);cursor:pointer;white-space:nowrap;border:none;background:none;font-family:var(--font)}
+.nav-link:hover{background:var(--gray-100);color:var(--gray-900)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 20px;height:40px;border-radius:var(--r50);font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);border:none;font-family:var(--font);white-space:nowrap}
+.btn-sm{height:34px;padding:0 16px;font-size:13px}
+.btn-lg{height:52px;padding:0 32px;font-size:16px}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,87,255,.3)}
+.btn-outline{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+.btn-outline:hover{background:var(--blue-light)}
+.btn-ghost{background:transparent;color:var(--gray-700);border:1.5px solid var(--gray-200)}
+.btn-ghost:hover{border-color:var(--gray-400);background:var(--gray-50)}
+.btn-orange{background:var(--orange);color:#fff}
+.btn-orange:hover{background:#e55f00;transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,0,.3)}
+.btn-full{width:100%}
+.hmbgr{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hmbgr span{display:block;width:22px;height:2px;background:var(--gray-700);border-radius:2px}
+.mob-menu{display:none;flex-direction:column;background:var(--white);border-bottom:1px solid var(--gray-200);padding:12px 16px}
+.mob-menu.open{display:flex}
+.mob-menu a,.mob-menu button{padding:12px 16px;color:var(--gray-700);font-size:15px;border-radius:var(--r8);border:none;background:none;font-family:var(--font);text-align:left;cursor:pointer;display:block}
+.mob-menu a:hover,.mob-menu button:hover{background:var(--gray-100)}
+
+/* HERO */
+.hero{background:var(--white);padding:80px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--blue-light),transparent 70%);z-index:0}
+.hero-inner{position:relative;z-index:1;max-width:860px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--blue-light);color:var(--blue-dark);padding:6px 16px;border-radius:var(--r50);font-size:13px;font-weight:600;margin-bottom:28px;border:1px solid rgba(0,87,255,.15)}
+.hero-badge-dot{width:6px;height:6px;background:var(--green);border-radius:50%}
+.hero-title{font-family:var(--serif);font-size:clamp(40px,7vw,72px);font-weight:800;line-height:1.1;color:var(--gray-900);margin-bottom:20px}
+.hero-title span{color:var(--blue)}
+.hero-sub{font-size:clamp(15px,2.5vw,19px);color:var(--gray-500);margin-bottom:44px;max-width:580px;margin-left:auto;margin-right:auto}
+.hero-box{background:var(--white);border-radius:var(--r16);border:1px solid var(--gray-200);padding:20px;box-shadow:var(--shadow-lg);max-width:700px;margin:0 auto 36px}
+.hero-row{display:flex;gap:12px}
+.hero-field{flex:1;display:flex;align-items:center;gap:10px;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:var(--r12);padding:14px 16px;transition:var(--transition)}
+.hero-field:focus-within{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(0,87,255,.08)}
+.hero-field-icon{font-size:16px;flex-shrink:0}
+.hero-field input{border:none;outline:none;background:transparent;font-size:15px;font-family:var(--font);color:var(--gray-800);width:100%}
+.hero-field input::placeholder{color:var(--gray-400)}
+.hero-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--gray-100)}
+.hero-tags-label{font-size:13px;color:var(--gray-400);flex-shrink:0}
+.tag-pill{padding:5px 12px;border:1px solid var(--gray-200);border-radius:var(--r50);font-size:13px;font-weight:500;color:var(--gray-700);cursor:pointer;transition:var(--transition);background:var(--white)}
+.tag-pill:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.hstat strong{display:block;font-family:var(--serif);font-size:30px;font-weight:800;color:var(--gray-900)}
+.hstat span{font-size:13px;color:var(--gray-500)}
+.hdivider{width:1px;height:36px;background:var(--gray-200)}
+
+/* TRUST BAR */
+.trust-bar{background:var(--gray-50);border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200);padding:16px 24px}
+.trust-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--gray-600)}
+.trust-icon{font-size:16px}
+
+/* SECTION */
+.section{padding:80px 0}
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+.sec-head{text-align:center;margin-bottom:52px}
+.sec-label{display:inline-block;background:var(--blue-light);color:var(--blue);font-size:12px;font-weight:700;padding:5px 14px;border-radius:var(--r50);letter-spacing:.5px;text-transform:uppercase;margin-bottom:16px}
+.sec-title{font-family:var(--serif);font-size:clamp(28px,4vw,42px);font-weight:800;color:var(--gray-900);margin-bottom:12px}
+.sec-sub{font-size:17px;color:var(--gray-500);max-width:500px;margin:0 auto}
+
+/* CATEGORIES */
+.cats-bg{background:var(--gray-50)}
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.cat-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r16);padding:28px 20px;text-align:center;cursor:pointer;transition:var(--transition)}
+.cat-card:hover{border-color:var(--blue);box-shadow:var(--shadow);transform:translateY(-3px)}
+.cat-icon-wrap{width:56px;height:56px;border-radius:var(--r12);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.cat-card h3{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.cat-card p{font-size:12px;color:var(--gray-500);margin-bottom:10px}
+.cat-count{font-size:12px;font-weight:600;color:var(--blue)}
+
+/* VENDOR CARDS */
+.vendors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.vcard{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r16);overflow:hidden;transition:var(--transition);cursor:pointer}
+.vcard:hover{box-shadow:var(--shadow-lg);border-color:var(--blue);transform:translateY(-3px)}
+.vcard-top{padding:20px 20px 16px}
+.vcard-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.vcard-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;font-family:var(--serif)}
+.vcard-meta h3{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:2px}
+.vcard-meta .vsub{font-size:12px;color:var(--gray-500);margin-bottom:6px}
+.badges{display:flex;gap:5px;flex-wrap:wrap}
+.badge{font-size:11px;font-weight:600;padding:3px 8px;border-radius:var(--r50)}
+.badge-v{background:var(--green-light);color:#00784A}
+.badge-t{background:#FFF8E1;color:#B45309}
+.badge-b{background:var(--blue-light);color:var(--blue-dark)}
+.badge-cat{background:var(--gray-100);color:var(--gray-600)}
+.vcard-stats{display:flex;gap:16px;align-items:center;margin-bottom:12px}
+.vcard-rating{display:flex;align-items:center;gap:4px;font-size:14px;font-weight:600;color:var(--gray-800)}
+.vcard-rating .star{color:var(--gold);font-size:14px}
+.vcard-rating .revs{font-size:12px;font-weight:400;color:var(--gray-400)}
+.vcard-loc{font-size:13px;color:var(--gray-500);display:flex;align-items:center;gap:4px}
+.vcard-price{font-size:13px;color:var(--gray-500)}
+.vcard-price strong{font-size:17px;font-weight:700;color:var(--gray-900)}
+.vcard-divider{height:1px;background:var(--gray-100);margin:0 20px}
+.vcard-foot{padding:12px 20px;display:flex;gap:8px}
+.vcard-foot .btn{flex:1;height:38px;font-size:13px}
+
+/* HOW IT WORKS */
+.how-bg{background:var(--gray-50)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative}
+.steps::before{content:'';position:absolute;top:40px;left:calc(100%/6);right:calc(100%/6);height:1px;background:var(--gray-200)}
+.step{text-align:center;padding:0 24px}
+.step-num{width:80px;height:80px;border-radius:50%;background:var(--white);border:2px solid var(--gray-200);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1;font-family:var(--serif);font-size:28px;font-weight:800;color:var(--blue)}
+.step.active-step .step-num{background:var(--blue);color:#fff;border-color:var(--blue)}
+.step h3{font-size:17px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.step p{font-size:14px;color:var(--gray-500);line-height:1.6}
+.escrow-box{background:linear-gradient(135deg,var(--blue),#0035CC);border-radius:var(--r16);padding:40px;display:flex;align-items:center;gap:32px;margin-top:60px;flex-wrap:wrap}
+.escrow-icon{width:64px;height:64px;background:rgba(255,255,255,.15);border-radius:var(--r12);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.escrow-text{flex:1;color:#fff}
+.escrow-text h3{font-family:var(--serif);font-size:22px;font-weight:800;margin-bottom:6px}
+.escrow-text p{opacity:.8;font-size:15px}
+
+/* FEATURED */
+.featured-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px}
+.featured-head .sec-head{text-align:left;margin-bottom:0}
+
+/* VENDOR CTA */
+.vcta-bg{background:var(--gray-900)}
+.vcta-card{display:grid;grid-template-columns:1fr auto;gap:64px;align-items:center;padding:72px 0}
+.vcta-left h2{font-family:var(--serif);font-size:42px;font-weight:800;color:#fff;margin-bottom:16px;line-height:1.15}
+.vcta-left p{font-size:17px;color:rgba(255,255,255,.6);margin-bottom:32px;max-width:480px}
+.vcta-perks{display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
+.vcta-perk{display:flex;align-items:center;gap:10px;font-size:15px;color:rgba(255,255,255,.8)}
+.vcta-perk-dot{width:20px;height:20px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:#fff}
+.earn-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r16);padding:40px;text-align:center;min-width:240px}
+.earn-label{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:8px}
+.earn-amt{font-family:var(--serif);font-size:48px;font-weight:800;color:#fff;line-height:1}
+.earn-per{font-size:20px;color:rgba(255,255,255,.4)}
+.earn-sub{font-size:13px;color:rgba(255,255,255,.35);margin-top:8px}
+
+/* TESTIMONIALS */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tcard{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r16);padding:28px}
+.tcard.tcard-ft{background:var(--blue);border-color:var(--blue)}
+.tcard-stars{color:var(--gold);font-size:16px;margin-bottom:14px}
+.tcard.tcard-ft .tcard-stars{color:#FFD54F}
+.tcard p{font-size:15px;line-height:1.65;color:var(--gray-600);margin-bottom:20px}
+.tcard.tcard-ft p{color:rgba(255,255,255,.9)}
+.tcard-auth{display:flex;align-items:center;gap:12px}
+.tcard-av{width:38px;height:38px;border-radius:50%;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.tcard.tcard-ft .tcard-av{background:rgba(255,255,255,.2);color:#fff}
+.tcard-name{font-size:14px;font-weight:600;color:var(--gray-900)}
+.tcard.tcard-ft .tcard-name{color:#fff}
+.tcard-loc{font-size:12px;color:var(--gray-400)}
+.tcard.tcard-ft .tcard-loc{color:rgba(255,255,255,.5)}
+
+/* BROWSE PAGE */
+.pg-hero-sm{background:linear-gradient(135deg,var(--gray-900),var(--blue-dark));padding:56px 0 44px;color:#fff}
+.pg-hero-sm h1{font-family:var(--serif);font-size:36px;font-weight:800;margin-bottom:8px}
+.pg-hero-sm p{font-size:16px;opacity:.7}
+.browse-layout{display:grid;grid-template-columns:260px 1fr;gap:28px;padding-top:32px;padding-bottom:80px;align-items:start}
+.filters{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r16);padding:24px;position:sticky;top:88px}
+.filters h3{font-size:16px;font-weight:700;color:var(--gray-900);margin-bottom:20px}
+.fg{margin-bottom:20px}
+.fg label{display:block;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.finput,.fselect{width:100%;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:var(--r8);font-size:14px;font-family:var(--font);outline:none;transition:var(--transition);background:var(--white);color:var(--gray-800)}
+.finput:focus,.fselect:focus{border-color:var(--blue)}
+.frange{width:100%;accent-color:var(--blue);margin-bottom:6px}
+.fcheck{display:flex;flex-direction:column;gap:8px}
+.fcheck label{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:400;color:var(--gray-700);cursor:pointer;text-transform:none;letter-spacing:0}
+.results-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.results-hdr span{font-size:14px;color:var(--gray-500)}
+
+/* PROFILE */
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--blue);background:none;border:none;cursor:pointer;padding:16px 0;font-family:var(--font)}
+.profile-layout{display:grid;grid-template-columns:1fr 340px;gap:28px;padding-bottom:80px;align-items:start}
+.profile-hdr{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r16);padding:32px;margin-bottom:20px;display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.profile-av{width:80px;height:80px;border-radius:50%;font-size:30px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);flex-shrink:0}
+.profile-info h1{font-family:var(--serif);font-size:26px;font-weight:800;color:var(--gray-900);margin-bottom:4px}
+.profile-info .ptitle{font-size:15px;color:var(--gray-500);margin-bottom:12px}
+.profile-stats{display:flex;gap:24px;flex-wrap:wrap}
+.pstat strong{display:block;font-size:22px;font-weight:700;color:var(--gray-900);font-family:var(--serif)}
+.pstat span{font-size:12px;color:var(--gray-500)}
+.card-box{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r16);padding:28px;margin-bottom:20px}
+.card-box h2{font-size:18px;font-weight:700;color:var(--gray-900);margin-bottom:14px}
+.review-item{padding:16px 0;border-bottom:1px solid var(--gray-100)}
+.review-item:last-child{border-bottom:none}
+.rev-hdr{display:flex;justify-content:space-between;margin-bottom:6px}
+.rev-author{font-size:14px;font-weight:600;color:var(--gray-900)}
+.rev-stars{color:var(--gold);font-size:13px}
+.rev-text{font-size:14px;color:var(--gray-600);line-height:1.6}
+.booking-sticky{position:sticky;top:88px}
+.booking-card{background:var(--white);border:2px solid var(--blue);border-radius:var(--r16);padding:28px}
+.booking-card h2{font-size:19px;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.bprice{font-size:30px;font-weight:800;color:var(--gray-900);font-family:var(--serif);margin-bottom:20px}
+.bprice span{font-size:15px;font-weight:400;color:var(--gray-400)}
+.btabs{display:flex;gap:8px;margin-bottom:16px}
+.btab{flex:1;padding:10px;border:1.5px solid var(--gray-200);border-radius:var(--r8);background:var(--white);cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font);transition:var(--transition);text-align:center}
+.btab.active{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.bform{display:flex;flex-direction:column;gap:12px}
+.bform .finput{border:1.5px solid var(--gray-200);border-radius:var(--r8);padding:12px 14px;font-size:14px;font-family:var(--font);outline:none;width:100%;transition:var(--transition)}
+.bform .finput:focus{border-color:var(--blue)}
+.bid-row{display:none}
+.bid-row.show{display:block}
+.escrow-note{text-align:center;font-size:12px;color:var(--gray-400);margin-top:8px}
+
+/* VENDOR REGISTER */
+.vreg-layout{display:grid;grid-template-columns:1fr 340px;gap:36px;padding:48px 0 80px;align-items:start}
+.vform-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r16);padding:36px}
+.vform-card h2{font-family:var(--serif);font-size:24px;font-weight:800;color:var(--gray-900);margin-bottom:28px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg-label{font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block}
+.finput,.fselect,textarea.finput{width:100%;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:var(--r8);font-size:15px;font-family:var(--font);outline:none;transition:var(--transition);background:var(--white);color:var(--gray-800)}
+.finput:focus,.fselect:focus,textarea.finput:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,87,255,.08)}
+.radio-list{display:flex;flex-direction:column;gap:8px}
+.radio-list label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gray-700);cursor:pointer}
+.form-note{text-align:center;font-size:12px;color:var(--gray-400);margin-top:12px}
+.vside-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r16);padding:28px;position:sticky;top:88px}
+.vside-card h3{font-size:17px;font-weight:700;color:var(--gray-900);margin-bottom:20px}
+.vbenefit{display:flex;gap:12px;margin-bottom:18px}
+.vbenefit-icon{font-size:22px;flex-shrink:0}
+.vbenefit h4{font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:3px}
+.vbenefit p{font-size:13px;color:var(--gray-500)}
+
+/* ADMIN */
+.admin-wrap{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.admin-side{background:var(--gray-900);color:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.admin-logo{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.admin-logo .logo-text{color:#fff;font-size:20px}
+.admin-nav{padding:16px 12px;flex:1;display:flex;flex-direction:column;gap:2px}
+.anav{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r8);color:rgba(255,255,255,.6);font-size:14px;font-weight:500;cursor:pointer;transition:var(--transition);border:none;background:none;font-family:var(--font);text-align:left;width:100%}
+.anav:hover,.anav.active{background:rgba(255,255,255,.08);color:#fff}
+.anav.active{color:#60ABFF}
+.admin-main{background:var(--gray-50);min-height:100vh;overflow-y:auto}
+.admin-content{padding:36px}
+.atab{display:none}
+.atab.active{display:block}
+.admin-title{font-family:var(--serif);font-size:26px;font-weight:800;color:var(--gray-900);margin-bottom:24px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.scard{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r12);padding:20px;display:flex;flex-direction:column;gap:6px}
+.scard-num{font-family:var(--serif);font-size:28px;font-weight:800;color:var(--gray-900)}
+.scard-label{font-size:13px;color:var(--gray-500)}
+.scard-trend{font-size:12px;font-weight:600;padding:3px 8px;border-radius:var(--r50);display:inline-block;width:fit-content}
+.trend-up{background:var(--green-light);color:#00784A}
+.trend-warn{background:var(--orange-light);color:#9A3D00}
+.trend-down{background:var(--red-light);color:#B71C1C}
+.scard.scard-hl{border-left:3px solid var(--green)}
+.table-wrap{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r12);overflow:hidden;margin-bottom:24px}
+.table-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--gray-100)}
+.table-hdr h3{font-size:16px;font-weight:700;color:var(--gray-900)}
+table{width:100%;border-collapse:collapse}
+th{padding:12px 16px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;background:var(--gray-50);border-bottom:1px solid var(--gray-100)}
+td{padding:14px 16px;font-size:14px;color:var(--gray-700);border-bottom:1px solid var(--gray-50)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(0,87,255,.02)}
+.status{padding:3px 10px;border-radius:var(--r50);font-size:12px;font-weight:600}
+.s-active{background:var(--green-light);color:#00784A}
+.s-pending{background:#FFF8E1;color:#B45309}
+.s-completed{background:var(--blue-light);color:var(--blue-dark)}
+.s-cancelled{background:var(--red-light);color:#B71C1C}
+.s-banned{background:var(--red-light);color:#B71C1C}
+.s-escrow{background:#FFF8E1;color:#B45309}
+.s-released{background:var(--green-light);color:#00784A}
+.s-open{background:var(--blue-light);color:var(--blue-dark)}
+.act-btns{display:flex;gap:6px}
+.act{padding:5px 12px;border-radius:var(--r4);font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);transition:var(--transition)}
+.act-ok{background:var(--green-light);color:#00784A}
+.act-ok:hover{background:var(--green);color:#fff}
+.act-del{background:var(--red-light);color:#B71C1C}
+.act-del:hover{background:var(--red);color:#fff}
+.act-view{background:var(--blue-light);color:var(--blue-dark)}
+.act-view:hover{background:var(--blue);color:#fff}
+.admin-search{padding:8px 14px;border:1.5px solid var(--gray-200);border-radius:var(--r50);font-size:14px;font-family:var(--font);outline:none;width:240px}
+.admin-search:focus{border-color:var(--blue)}
+.tab-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:16px}
+.dispute-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r12);border-left:3px solid var(--red);padding:20px;margin-bottom:16px}
+.dispute-card h3{font-size:15px;font-weight:700;color:var(--gray-900);margin-bottom:8px}
+.dispute-card p{font-size:14px;color:var(--gray-600);margin-bottom:12px;line-height:1.6}
+.dispute-meta{display:flex;gap:20px;font-size:12px;color:var(--gray-400);margin-bottom:14px;flex-wrap:wrap}
+.pay-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.pay-scard{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r12);padding:20px}
+.pay-scard.hl{border-left:3px solid var(--green)}
+.pay-scard h4{font-size:12px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.pay-scard .big{font-family:var(--serif);font-size:26px;font-weight:800;color:var(--gray-900)}
+
+/* MODALS */
+.modal-ov{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-ov.open{display:flex}
+.modal-box{background:var(--white);border-radius:var(--r24);padding:44px;width:90%;max-width:460px;position:relative;animation:mIn .25s ease;max-height:90vh;overflow-y:auto}
+.modal-box.modal-lg{max-width:580px}
+@keyframes mIn{from{opacity:0;transform:scale(.94) translateY(12px)}to{opacity:1;transform:none}}
+.modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;background:var(--gray-100);border:none;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.modal-close:hover{background:var(--gray-200)}
+.modal-title{font-family:var(--serif);font-size:24px;font-weight:800;color:var(--gray-900);margin-bottom:6px}
+.modal-sub{font-size:14px;color:var(--gray-400);margin-bottom:28px}
+.mform{display:flex;flex-direction:column;gap:14px}
+.mform .finput{border:1.5px solid var(--gray-200);border-radius:var(--r8);padding:12px 14px;font-size:15px;font-family:var(--font);width:100%;outline:none;transition:var(--transition)}
+.mform .finput:focus{border-color:var(--blue)}
+.modal-foot{text-align:center;margin-top:16px;font-size:14px;color:var(--gray-400)}
+.modal-foot a{color:var(--blue);cursor:pointer;font-weight:600}
+.divider-or{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--gray-300)}
+.divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:var(--gray-200)}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;z-index:99999;background:var(--gray-900);color:#fff;padding:14px 22px;border-radius:var(--r50);font-size:14px;font-weight:500;pointer-events:none;opacity:0;transform:translateY(16px);transition:.3s ease}
+.toast.show{opacity:1;transform:none}
+
+/* FOOTER */
+footer{background:var(--gray-900);color:#fff;padding:64px 0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand p{font-size:14px;color:rgba(255,255,255,.4);margin-top:16px;max-width:280px;line-height:1.7}
+.footer-col h4{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.4);margin-bottom:14px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,.55);margin-bottom:10px;transition:var(--transition);cursor:pointer}
+.footer-col a:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,.3);flex-wrap:wrap;gap:10px}
+.pay-badges{display:flex;gap:8px;flex-wrap:wrap}
+.pay-badge{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r4);padding:4px 10px;font-size:11px;font-weight:600;color:rgba(255,255,255,.4)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .browse-layout,.profile-layout,.vreg-layout{grid-template-columns:1fr}
+  .filters,.booking-sticky,.vside-card{position:static}
+  .steps::before{display:none}
+  .steps{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .pay-summary{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav-search,.nav-links{display:none}
+  .hmbgr{display:flex}
+  .hero-row{flex-direction:column}
+  .hero-stats{gap:20px}
+  .hdivider{display:none}
+  .vcta-card{grid-template-columns:1fr}
+  .admin-wrap{grid-template-columns:1fr}
+  .admin-side{display:none}
+  .cats-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr}
+  .section{padding:56px 0}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════════
-     NAVBAR
-══════════════════════════════════════════════════════ -->
-<nav class="navbar" id="navbar">
+<!-- NAV -->
+<nav class="nav" id="nav">
   <div class="nav-inner">
-    <a href="#" class="logo">
-      <span class="logo-icon">⬡</span>
-      <span class="logo-text">Hubmend</span>
+    <a class="logo" onclick="showPg('home')">
+      <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M12 3L4 9v12h16V9L12 3z"/><path d="M9 21V12h6v9"/></svg></div>
+      <span class="logo-text">Hub<span>mend</span></span>
     </a>
-
     <div class="nav-search">
-      <input type="text" placeholder="Search doctors, engineers, plumbers..." class="nav-search-input" id="navSearch" />
-      <button class="nav-search-btn">Search</button>
+      <svg class="nav-search-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/></svg>
+      <input type="text" placeholder="Search doctors, engineers, plumbers..." id="navQ" onkeydown="if(event.key==='Enter')doSearch()"/>
     </div>
-
     <div class="nav-links">
-      <a href="#" class="nav-link" onclick="showPage('home')">Home</a>
-      <a href="#" class="nav-link" onclick="showPage('services')">Browse</a>
-      <a href="#" class="nav-link" onclick="showPage('how')">How It Works</a>
-      <button class="btn-outline" onclick="showModal('login')">Log In</button>
-      <button class="btn-primary" onclick="showModal('signup')">Join Free</button>
+      <button class="nav-link" onclick="showPg('home')">Home</button>
+      <button class="nav-link" onclick="showPg('browse')">Browse</button>
+      <button class="nav-link" onclick="showPg('vendor')">Become a Vendor</button>
+      <button class="btn btn-ghost btn-sm" onclick="showModal('login')">Log In</button>
+      <button class="btn btn-primary btn-sm" onclick="showModal('signup')">Join Free</button>
     </div>
-
-    <button class="hamburger" onclick="toggleMenu()" id="hamburger">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="hmbgr" onclick="toggleMob()"><span></span><span></span><span></span></button>
   </div>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#" onclick="showPage('home');toggleMenu()">Home</a>
-    <a href="#" onclick="showPage('services');toggleMenu()">Browse Services</a>
-    <a href="#" onclick="showPage('how');toggleMenu()">How It Works</a>
-    <a href="#" onclick="showModal('login');toggleMenu()">Log In</a>
-    <a href="#" onclick="showModal('signup');toggleMenu()">Join Free</a>
-    <a href="#" onclick="showPage('vendor');toggleMenu()">Become a Vendor</a>
+  <div class="mob-menu" id="mobMenu">
+    <a onclick="showPg('home');toggleMob()">Home</a>
+    <a onclick="showPg('browse');toggleMob()">Browse Services</a>
+    <a onclick="showPg('vendor');toggleMob()">Become a Vendor</a>
+    <button onclick="showModal('login');toggleMob()">Log In</button>
+    <button onclick="showModal('signup');toggleMob()">Join Free</button>
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE: HOME
-══════════════════════════════════════════════════════ -->
-<div id="page-home" class="page active">
+<!-- ═══ HOME PAGE ═══ -->
+<div id="pg-home" class="page active">
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-bg">
-      <div class="hero-orb orb1"></div>
-      <div class="hero-orb orb2"></div>
-      <div class="hero-orb orb3"></div>
-      <div class="grid-overlay"></div>
-    </div>
-    <div class="hero-content">
-      <div class="hero-badge">🇵🇰 Pakistan's #1 Service Platform</div>
-      <h1 class="hero-title">
-        Find <span class="gradient-text">Any Expert.</span><br/>
-        Book <span class="gradient-text">Any Service.</span>
-      </h1>
-      <p class="hero-subtitle">
-        Doctors · Engineers · Lawyers · Plumbers · Electricians · Designers<br/>
-        <strong>10,000+ verified professionals</strong> — fixed price or your best bid.
-      </p>
-
-      <div class="hero-search-box">
-        <div class="search-row">
-          <div class="search-field">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="What service do you need?" id="heroService" />
+    <div class="hero-inner">
+      <div class="hero-badge"><div class="hero-badge-dot"></div>Pakistan's #1 Service Marketplace — 10,000+ Verified Experts</div>
+      <h1 class="hero-title">Find Any Expert.<br/><span>Book Any Service.</span></h1>
+      <p class="hero-sub">Doctors · Engineers · Lawyers · Plumbers · Electricians · Designers<br/>Fixed price or bid — your choice. 100% secure escrow payments.</p>
+      <div class="hero-box">
+        <div class="hero-row">
+          <div class="hero-field">
+            <span class="hero-field-icon">🔍</span>
+            <input type="text" placeholder="What service do you need?" id="hService"/>
           </div>
-          <div class="search-field">
-            <span class="search-icon">📍</span>
-            <input type="text" placeholder="Your city" id="heroCity" />
+          <div class="hero-field">
+            <span class="hero-field-icon">📍</span>
+            <input type="text" placeholder="Your city" id="hCity"/>
           </div>
-          <button class="search-btn" onclick="doSearch()">Find Experts</button>
+          <button class="btn btn-primary btn-lg" onclick="doSearch()">Find Experts</button>
         </div>
-        <div class="popular-tags">
-          <span>Popular:</span>
-          <button onclick="quickSearch('Doctor')">Doctor</button>
-          <button onclick="quickSearch('Plumber')">Plumber</button>
-          <button onclick="quickSearch('Lawyer')">Lawyer</button>
-          <button onclick="quickSearch('Engineer')">Engineer</button>
-          <button onclick="quickSearch('Designer')">Designer</button>
+        <div class="hero-tags">
+          <span class="hero-tags-label">Popular:</span>
+          <button class="tag-pill" onclick="qSearch('Doctor')">Doctor</button>
+          <button class="tag-pill" onclick="qSearch('Plumber')">Plumber</button>
+          <button class="tag-pill" onclick="qSearch('Lawyer')">Lawyer</button>
+          <button class="tag-pill" onclick="qSearch('Engineer')">Engineer</button>
+          <button class="tag-pill" onclick="qSearch('Designer')">Designer</button>
+          <button class="tag-pill" onclick="qSearch('Tutor')">Tutor</button>
         </div>
       </div>
-
       <div class="hero-stats">
-        <div class="stat"><strong>50K+</strong><span>Happy Clients</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><strong>10K+</strong><span>Verified Experts</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><strong>200+</strong><span>Service Types</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><strong>4.9★</strong><span>Avg Rating</span></div>
+        <div class="hstat"><strong>50K+</strong><span>Happy Clients</span></div>
+        <div class="hdivider"></div>
+        <div class="hstat"><strong>10K+</strong><span>Verified Experts</span></div>
+        <div class="hdivider"></div>
+        <div class="hstat"><strong>200+</strong><span>Service Types</span></div>
+        <div class="hdivider"></div>
+        <div class="hstat"><strong>4.9★</strong><span>Average Rating</span></div>
       </div>
     </div>
   </section>
 
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-inner">
+      <div class="trust-item"><span class="trust-icon">🔐</span>100% Escrow Protected</div>
+      <div class="trust-item"><span class="trust-icon">✅</span>CNIC Verified Vendors</div>
+      <div class="trust-item"><span class="trust-icon">⚡</span>Instant Raast Payments</div>
+      <div class="trust-item"><span class="trust-icon">💬</span>Built-in Chat & Video Calls</div>
+      <div class="trust-item"><span class="trust-icon">🛡️</span>Money-Back Guarantee</div>
+    </div>
+  </div>
+
   <!-- CATEGORIES -->
-  <section class="section categories-section">
+  <section class="section cats-bg">
     <div class="container">
-      <div class="section-header">
-        <h2>Browse <span class="gradient-text">All Categories</span></h2>
-        <p>Every professional service you need — in one place</p>
+      <div class="sec-head">
+        <div class="sec-label">All Categories</div>
+        <h2 class="sec-title">Every Service You Need</h2>
+        <p class="sec-sub">200+ service types — one platform, Pakistan-wide coverage</p>
       </div>
-      <div class="categories-grid">
-        <div class="cat-card" onclick="filterCategory('Medical')">
-          <div class="cat-icon">🏥</div>
-          <h3>Medical</h3>
-          <p>Doctors, Dentists, Therapists</p>
-          <span class="cat-count">1,200+ experts</span>
-        </div>
-        <div class="cat-card" onclick="filterCategory('Legal')">
-          <div class="cat-icon">⚖️</div>
-          <h3>Legal</h3>
-          <p>Lawyers, Consultants, Notaries</p>
-          <span class="cat-count">800+ experts</span>
-        </div>
-        <div class="cat-card" onclick="filterCategory('Engineering')">
-          <div class="cat-icon">⚙️</div>
-          <h3>Engineering</h3>
-          <p>Civil, Software, Mechanical</p>
-          <span class="cat-count">2,100+ experts</span>
-        </div>
-        <div class="cat-card" onclick="filterCategory('Home Services')">
-          <div class="cat-icon">🔧</div>
-          <h3>Home Services</h3>
-          <p>Plumbers, Electricians, Carpenters</p>
-          <span class="cat-count">3,500+ experts</span>
-        </div>
-        <div class="cat-card" onclick="filterCategory('Design')">
-          <div class="cat-icon">🎨</div>
-          <h3>Design</h3>
-          <p>Graphic, Interior, UI/UX</p>
-          <span class="cat-count">900+ experts</span>
-        </div>
-        <div class="cat-card" onclick="filterCategory('Education')">
-          <div class="cat-icon">📚</div>
-          <h3>Education</h3>
-          <p>Tutors, Coaches, Trainers</p>
-          <span class="cat-count">1,500+ experts</span>
-        </div>
-        <div class="cat-card" onclick="filterCategory('Finance')">
-          <div class="cat-icon">💼</div>
-          <h3>Finance</h3>
-          <p>Accountants, Tax Advisors, CFOs</p>
-          <span class="cat-count">600+ experts</span>
-        </div>
-        <div class="cat-card" onclick="filterCategory('Technology')">
-          <div class="cat-icon">💻</div>
-          <h3>Technology</h3>
-          <p>Developers, IT Support, Cyber</p>
-          <span class="cat-count">1,800+ experts</span>
-        </div>
+      <div class="cats-grid">
+        <div class="cat-card" onclick="filterCat('Medical')"><div class="cat-icon-wrap" style="background:#EBF8F2"><span>🏥</span></div><h3>Medical</h3><p>Doctors, Dentists, Therapists</p><div class="cat-count">1,200+ experts</div></div>
+        <div class="cat-card" onclick="filterCat('Legal')"><div class="cat-icon-wrap" style="background:#F3F0FF"><span>⚖️</span></div><h3>Legal</h3><p>Lawyers, Consultants, Notaries</p><div class="cat-count">800+ experts</div></div>
+        <div class="cat-card" onclick="filterCat('Engineering')"><div class="cat-icon-wrap" style="background:#EBF1FF"><span>⚙️</span></div><h3>Engineering</h3><p>Civil, Software, Mechanical</p><div class="cat-count">2,100+ experts</div></div>
+        <div class="cat-card" onclick="filterCat('Home Services')"><div class="cat-icon-wrap" style="background:#FFF3EB"><span>🔧</span></div><h3>Home Services</h3><p>Plumbers, Electricians, Carpenters</p><div class="cat-count">3,500+ experts</div></div>
+        <div class="cat-card" onclick="filterCat('Design')"><div class="cat-icon-wrap" style="background:#FFF0F5"><span>🎨</span></div><h3>Design</h3><p>Graphic, Interior, UI/UX</p><div class="cat-count">900+ experts</div></div>
+        <div class="cat-card" onclick="filterCat('Education')"><div class="cat-icon-wrap" style="background:#EBF8F2"><span>📚</span></div><h3>Education</h3><p>Tutors, Coaches, Trainers</p><div class="cat-count">1,500+ experts</div></div>
+        <div class="cat-card" onclick="filterCat('Finance')"><div class="cat-icon-wrap" style="background:#FFFCE8"><span>💼</span></div><h3>Finance</h3><p>Accountants, Tax Advisors, CFOs</p><div class="cat-count">600+ experts</div></div>
+        <div class="cat-card" onclick="filterCat('Technology')"><div class="cat-icon-wrap" style="background:#EBF1FF"><span>💻</span></div><h3>Technology</h3><p>Developers, IT Support, Cyber</p><div class="cat-count">1,800+ experts</div></div>
       </div>
     </div>
   </section>
 
   <!-- FEATURED VENDORS -->
-  <section class="section featured-section">
+  <section class="section">
     <div class="container">
-      <div class="section-header">
-        <h2>Top Rated <span class="gradient-text">Experts</span></h2>
-        <p>Handpicked professionals with verified credentials</p>
-        <button class="btn-outline" onclick="showPage('services')">View All →</button>
+      <div class="featured-head">
+        <div class="sec-head" style="text-align:left;margin-bottom:0">
+          <div class="sec-label">Top Rated</div>
+          <h2 class="sec-title">Featured Experts</h2>
+        </div>
+        <button class="btn btn-ghost" onclick="showPg('browse')">View All Experts →</button>
       </div>
+      <div style="height:32px"></div>
       <div class="vendors-grid" id="featuredVendors"></div>
     </div>
   </section>
 
   <!-- HOW IT WORKS -->
-  <section class="section how-section" id="how-it-works">
+  <section class="section how-bg">
     <div class="container">
-      <div class="section-header">
-        <h2>How <span class="gradient-text">Hubmend</span> Works</h2>
-        <p>Get any service done in 3 simple steps</p>
+      <div class="sec-head">
+        <div class="sec-label">Simple Process</div>
+        <h2 class="sec-title">How Hubmend Works</h2>
+        <p class="sec-sub">Book any service in 3 simple steps</p>
       </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">01</div>
-          <div class="step-icon">🔍</div>
-          <h3>Search & Compare</h3>
-          <p>Browse hundreds of verified professionals. Filter by rating, price, location, and availability.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step-card">
-          <div class="step-number">02</div>
-          <div class="step-icon">📋</div>
-          <h3>Book or Bid</h3>
-          <p>Choose fixed price booking or post a job and let experts bid competitively for your project.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step-card">
-          <div class="step-number">03</div>
-          <div class="step-icon">✅</div>
-          <h3>Pay Safely & Review</h3>
-          <p>Your payment is held in escrow until the job is done. Release when satisfied. Zero risk.</p>
-        </div>
+      <div class="steps">
+        <div class="step active-step"><div class="step-num">1</div><h3>Search & Compare</h3><p>Browse verified professionals. Filter by rating, price, location, and availability to find your perfect match.</p></div>
+        <div class="step"><div class="step-num">2</div><h3>Book or Bid</h3><p>Choose a fixed-price booking or post your job and let experts bid competitively. You pick the best offer.</p></div>
+        <div class="step"><div class="step-num">3</div><h3>Pay Safely & Review</h3><p>Your payment is held in escrow until the job is confirmed complete. Release when satisfied — zero risk.</p></div>
       </div>
-      <div class="escrow-banner">
-        <span class="escrow-icon">🔐</span>
-        <div>
-          <strong>100% Secure Escrow Payments</strong>
-          <p>Your money is protected until you confirm the job is done perfectly.</p>
-        </div>
-        <button class="btn-primary" onclick="showModal('signup')">Get Started Free</button>
+      <div class="escrow-box">
+        <div class="escrow-icon">🔐</div>
+        <div class="escrow-text"><h3>100% Secure Escrow — Your Money is Always Safe</h3><p>We hold your payment until you confirm the job is done perfectly. No risk, no chasing, no disputes without resolution.</p></div>
+        <button class="btn btn-lg" style="background:#fff;color:var(--blue);flex-shrink:0" onclick="showModal('signup')">Get Started Free →</button>
       </div>
     </div>
   </section>
 
   <!-- VENDOR CTA -->
-  <section class="section vendor-cta-section">
+  <section class="vcta-bg">
     <div class="container">
-      <div class="vendor-cta-card">
-        <div class="vendor-cta-left">
-          <h2>Are You a Professional?</h2>
-          <p>Join 10,000+ experts already earning on Hubmend. Set your own rates, get verified clients, receive payments instantly via Raast.</p>
-          <ul class="vendor-benefits">
-            <li>✅ Free profile setup</li>
-            <li>✅ Verified badge after review</li>
-            <li>✅ Instant Raast payments</li>
-            <li>✅ Build your reputation</li>
-            <li>✅ Fixed price or accept bids</li>
-          </ul>
-          <button class="btn-primary btn-large" onclick="showPage('vendor')">Join as a Vendor →</button>
-        </div>
-        <div class="vendor-cta-right">
-          <div class="earning-card">
-            <p>Average vendor earns</p>
-            <div class="big-earning">Rs. 85,000<span>/month</span></div>
-            <p class="small-text">Top vendors earn Rs. 3,00,000+</p>
+      <div class="vcta-card">
+        <div class="vcta-left">
+          <h2>Are You a Professional?<br/>Start Earning Today.</h2>
+          <p>Join 10,000+ experts already earning on Hubmend. Set your own rates, get verified clients, and receive payments instantly via Raast.</p>
+          <div class="vcta-perks">
+            <div class="vcta-perk"><div class="vcta-perk-dot">✓</div>Free profile setup — no upfront cost</div>
+            <div class="vcta-perk"><div class="vcta-perk-dot">✓</div>Verified badge after 24-hour review</div>
+            <div class="vcta-perk"><div class="vcta-perk-dot">✓</div>Instant Raast payments after every job</div>
+            <div class="vcta-perk"><div class="vcta-perk-dot">✓</div>Accept fixed price or bidding jobs</div>
+            <div class="vcta-perk"><div class="vcta-perk-dot">✓</div>In-app chat and video calls with clients</div>
           </div>
+          <button class="btn btn-orange btn-lg" onclick="showPg('vendor')">Join as a Vendor — It's Free →</button>
+        </div>
+        <div class="earn-card">
+          <div class="earn-label">Average vendor earns</div>
+          <div class="earn-amt">Rs. 85K<span>/mo</span></div>
+          <div class="earn-sub">Top vendors earn Rs. 3,00,000+/month</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- TESTIMONIALS -->
-  <section class="section testimonials-section">
+  <section class="section">
     <div class="container">
-      <div class="section-header">
-        <h2>What People <span class="gradient-text">Say</span></h2>
+      <div class="sec-head">
+        <div class="sec-label">Reviews</div>
+        <h2 class="sec-title">What People Are Saying</h2>
       </div>
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>"Found an amazing civil engineer for my construction project in Lahore. The bidding system got me 40% cheaper than market rate!"</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">AK</div>
-            <div><strong>Ahmed Khan</strong><span>Lahore</span></div>
-          </div>
-        </div>
-        <div class="testimonial-card featured-testimonial">
-          <div class="stars">★★★★★</div>
-          <p>"As a doctor, Hubmend has completely changed my practice. I get online consultations from across Pakistan. Payments are instant!"</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">DF</div>
-            <div><strong>Dr. Fatima</strong><span>Karachi</span></div>
-          </div>
-        </div>
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>"My electrician cancelled last minute. Found a verified replacement on Hubmend within 20 minutes. Unbelievable platform!"</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">SR</div>
-            <div><strong>Sara Raza</strong><span>Islamabad</span></div>
-          </div>
-        </div>
+      <div class="testi-grid">
+        <div class="tcard"><div class="tcard-stars">★★★★★</div><p>"Found an amazing civil engineer for my construction in Lahore. The bidding system saved me 40% vs market rate. Will use again!"</p><div class="tcard-auth"><div class="tcard-av">AK</div><div><div class="tcard-name">Ahmed Khan</div><div class="tcard-loc">Lahore, Construction</div></div></div></div>
+        <div class="tcard tcard-ft"><div class="tcard-stars">★★★★★</div><p>"As a doctor, Hubmend transformed my practice. I get online consultations from all over Pakistan. Payments are instant!"</p><div class="tcard-auth"><div class="tcard-av">DF</div><div><div class="tcard-name">Dr. Fatima</div><div class="tcard-loc">Karachi, Medical</div></div></div></div>
+        <div class="tcard"><div class="tcard-stars">★★★★★</div><p>"My electrician cancelled last minute. Found a verified replacement on Hubmend in 20 minutes. Absolutely incredible platform!"</p><div class="tcard-auth"><div class="tcard-av">SR</div><div><div class="tcard-name">Sara Raza</div><div class="tcard-loc">Islamabad, Home Services</div></div></div></div>
       </div>
     </div>
   </section>
 
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo"><div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 3L4 9v12h16V9L12 3z"/><path d="M9 21V12h6v9"/></svg></div><span class="logo-text" style="color:#fff">Hub<span style="color:#60ABFF">mend</span></span></div>
+          <p>Pakistan's most trusted platform for booking verified professionals across every service category.</p>
+        </div>
+        <div class="footer-col"><h4>Services</h4><a onclick="filterCat('Medical')">Medical</a><a onclick="filterCat('Legal')">Legal</a><a onclick="filterCat('Engineering')">Engineering</a><a onclick="filterCat('Home Services')">Home Services</a><a onclick="filterCat('Technology')">Technology</a></div>
+        <div class="footer-col"><h4>Company</h4><a>About Us</a><a>Careers</a><a>Press</a><a>Blog</a><a>Contact</a></div>
+        <div class="footer-col"><h4>Support</h4><a>Help Center</a><a>Safety Center</a><a>Terms of Service</a><a>Privacy Policy</a><a onclick="adminAccess()">Admin Panel</a></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Hubmend. All rights reserved. Made in 🇵🇰 Pakistan</span>
+        <div class="pay-badges"><span class="pay-badge">Raast</span><span class="pay-badge">NayaPay</span><span class="pay-badge">JazzCash</span><span class="pay-badge">Easypaisa</span></div>
+      </div>
+    </div>
+  </footer>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE: SERVICES / BROWSE
-══════════════════════════════════════════════════════ -->
-<div id="page-services" class="page">
-  <div class="page-hero-small">
-    <div class="container">
-      <h1>Browse <span class="gradient-text">All Services</span></h1>
-      <p>Find verified experts across every category</p>
-    </div>
+<!-- ═══ BROWSE PAGE ═══ -->
+<div id="pg-browse" class="page">
+  <div class="pg-hero-sm">
+    <div class="container"><h1>Browse All Experts</h1><p>Verified professionals across every category — Pakistan-wide</p></div>
   </div>
-
   <div class="container browse-layout">
-    <!-- FILTERS SIDEBAR -->
-    <aside class="filters-sidebar">
-      <h3>Filters</h3>
-
-      <div class="filter-group">
-        <label>Search</label>
-        <input type="text" placeholder="Service or name..." id="searchInput" oninput="applyFilters()" class="filter-input" />
-      </div>
-
-      <div class="filter-group">
-        <label>Category</label>
-        <select id="catFilter" onchange="applyFilters()" class="filter-select">
-          <option value="">All Categories</option>
-          <option>Medical</option>
-          <option>Legal</option>
-          <option>Engineering</option>
-          <option>Home Services</option>
-          <option>Design</option>
-          <option>Education</option>
-          <option>Finance</option>
-          <option>Technology</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>Booking Type</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" id="fixedFilter" onchange="applyFilters()" checked /> Fixed Price</label>
-          <label><input type="checkbox" id="bidFilter" onchange="applyFilters()" checked /> Accepts Bids</label>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <label>Min Rating</label>
-        <select id="ratingFilter" onchange="applyFilters()" class="filter-select">
-          <option value="0">Any Rating</option>
-          <option value="4">4★ and above</option>
-          <option value="4.5">4.5★ and above</option>
-          <option value="4.8">4.8★ and above</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>Max Price (Rs.)</label>
-        <input type="range" id="priceFilter" min="500" max="50000" value="50000" oninput="updatePriceLabel(this.value);applyFilters()" class="range-input" />
-        <span id="priceLabel">Up to Rs. 50,000</span>
-      </div>
-
-      <div class="filter-group">
-        <label>City</label>
-        <select id="cityFilter" onchange="applyFilters()" class="filter-select">
-          <option value="">All Cities</option>
-          <option>Lahore</option>
-          <option>Karachi</option>
-          <option>Islamabad</option>
-          <option>Faisalabad</option>
-          <option>Multan</option>
-          <option>Rawalpindi</option>
-          <option>Peshawar</option>
-          <option>Quetta</option>
-        </select>
-      </div>
-
-      <button class="btn-outline full-width" onclick="resetFilters()">Reset Filters</button>
+    <aside class="filters">
+      <h3>Filter Results</h3>
+      <div class="fg"><label>Search</label><input type="text" class="finput" placeholder="Name or service..." id="fSearch" oninput="applyF()"/></div>
+      <div class="fg"><label>Category</label><select class="fselect" id="fCat" onchange="applyF()"><option value="">All Categories</option><option>Medical</option><option>Legal</option><option>Engineering</option><option>Home Services</option><option>Design</option><option>Education</option><option>Finance</option><option>Technology</option></select></div>
+      <div class="fg"><label>Booking Type</label><div class="fcheck"><label><input type="checkbox" id="fFixed" checked onchange="applyF()"/> Fixed Price</label><label><input type="checkbox" id="fBid" checked onchange="applyF()"/> Accepts Bids</label></div></div>
+      <div class="fg"><label>Min Rating</label><select class="fselect" id="fRating" onchange="applyF()"><option value="0">Any Rating</option><option value="4">4★ and above</option><option value="4.5">4.5★ and above</option><option value="4.8">4.8★ and above</option></select></div>
+      <div class="fg"><label>Max Price (Rs.)</label><input type="range" class="frange" id="fPrice" min="500" max="50000" value="50000" step="500" oninput="updatePrice(this.value);applyF()"/><div id="fPriceLabel" style="font-size:12px;color:var(--gray-400)">Up to Rs. 50,000</div></div>
+      <div class="fg"><label>City</label><select class="fselect" id="fCity" onchange="applyF()"><option value="">All Cities</option><option>Lahore</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option><option>Multan</option><option>Rawalpindi</option><option>Peshawar</option><option>Quetta</option></select></div>
+      <button class="btn btn-ghost btn-full" onclick="resetF()" style="margin-top:4px">Reset Filters</button>
     </aside>
-
-    <!-- RESULTS -->
-    <div class="results-area">
-      <div class="results-header">
-        <span id="resultsCount">Showing all experts</span>
-        <select class="filter-select" onchange="sortVendors(this.value)">
-          <option value="rating">Sort: Top Rated</option>
-          <option value="price_low">Price: Low to High</option>
-          <option value="price_high">Price: High to Low</option>
-          <option value="newest">Newest First</option>
-        </select>
+    <div>
+      <div class="results-hdr">
+        <span id="resCount">Loading...</span>
+        <select class="fselect" style="width:auto" onchange="sortV(this.value)"><option value="rating">Top Rated</option><option value="price_low">Price: Low→High</option><option value="price_high">Price: High→Low</option></select>
       </div>
-      <div class="vendors-grid results-grid" id="allVendors"></div>
+      <div class="vendors-grid" id="allVendors"></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE: VENDOR PROFILE
-══════════════════════════════════════════════════════ -->
-<div id="page-profile" class="page">
+<!-- ═══ PROFILE PAGE ═══ -->
+<div id="pg-profile" class="page">
   <div class="container">
-    <button class="back-btn" onclick="showPage('services')">← Back to Browse</button>
-    <div class="profile-layout" id="vendorProfileContent"></div>
+    <button class="back-btn" onclick="showPg('browse')">← Back to Browse</button>
+    <div class="profile-layout" id="profileContent"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE: VENDOR REGISTER
-══════════════════════════════════════════════════════ -->
-<div id="page-vendor" class="page">
-  <div class="page-hero-small">
-    <div class="container">
-      <h1>Become a <span class="gradient-text">Hubmend Vendor</span></h1>
-      <p>Start earning in 24 hours — free to join</p>
-    </div>
-  </div>
+<!-- ═══ VENDOR REGISTER ═══ -->
+<div id="pg-vendor" class="page">
+  <div class="pg-hero-sm"><div class="container"><h1>Become a Hubmend Vendor</h1><p>Start earning in 24 hours — free to join</p></div></div>
   <div class="container">
-    <div class="vendor-form-layout">
-      <div class="vendor-form-card">
+    <div class="vreg-layout">
+      <div class="vform-card">
         <h2>Create Your Professional Profile</h2>
-
-        <div class="form-group">
-          <label>Full Name *</label>
-          <input type="text" class="form-input" placeholder="Your full name" id="vName" />
+        <div class="form-row">
+          <div class="fg"><span class="fg-label">Full Name *</span><input type="text" class="finput" placeholder="Your full name" id="vName"/></div>
+          <div class="fg"><span class="fg-label">Phone *</span><input type="tel" class="finput" placeholder="03XX-XXXXXXX" id="vPhone"/></div>
         </div>
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" class="form-input" placeholder="03XX-XXXXXXX" id="vPhone" />
+        <div class="form-row">
+          <div class="fg"><span class="fg-label">Email *</span><input type="email" class="finput" placeholder="your@email.com" id="vEmail"/></div>
+          <div class="fg"><span class="fg-label">City *</span><select class="fselect" id="vCity"><option value="">Select city</option><option>Lahore</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option><option>Multan</option><option>Rawalpindi</option><option>Peshawar</option><option>Quetta</option></select></div>
         </div>
-        <div class="form-group">
-          <label>Email Address *</label>
-          <input type="email" class="form-input" placeholder="your@email.com" id="vEmail" />
+        <div class="fg"><span class="fg-label">Service Category *</span><select class="fselect" id="vCat"><option value="">Select your category</option><option>Medical</option><option>Legal</option><option>Engineering</option><option>Home Services</option><option>Design</option><option>Education</option><option>Finance</option><option>Technology</option></select></div>
+        <div class="fg"><span class="fg-label">Professional Title *</span><input type="text" class="finput" placeholder="e.g. Expert Civil Engineer — 10 years exp" id="vTitle"/></div>
+        <div class="form-row">
+          <div class="fg"><span class="fg-label">Starting Price (Rs.) *</span><input type="number" class="finput" placeholder="e.g. 2000" id="vPrice"/></div>
+          <div class="fg"><span class="fg-label">Experience (years)</span><input type="number" class="finput" placeholder="e.g. 5" id="vExp"/></div>
         </div>
-        <div class="form-group">
-          <label>Service Category *</label>
-          <select class="form-input" id="vCategory">
-            <option value="">Select your category</option>
-            <option>Medical</option>
-            <option>Legal</option>
-            <option>Engineering</option>
-            <option>Home Services</option>
-            <option>Design</option>
-            <option>Education</option>
-            <option>Finance</option>
-            <option>Technology</option>
-          </select>
+        <div class="fg"><span class="fg-label">Booking Type *</span><div class="radio-list"><label><input type="radio" name="btype" value="fixed" checked/> Fixed Price Only</label><label><input type="radio" name="btype" value="bid"/> Accepts Bids</label><label><input type="radio" name="btype" value="both"/> Both Fixed & Bids</label></div></div>
+        <div class="fg"><span class="fg-label">About You / Your Service *</span><textarea class="finput" rows="4" placeholder="Describe your expertise, qualifications, and what makes you the best choice..." id="vBio"></textarea></div>
+        <div class="form-row">
+          <div class="fg"><span class="fg-label">CNIC Number *</span><input type="text" class="finput" placeholder="XXXXX-XXXXXXX-X" id="vCnic"/></div>
+          <div class="fg"><span class="fg-label">Raast ID for Payments *</span><input type="text" class="finput" placeholder="Your Raast or bank account" id="vRaast"/></div>
         </div>
-        <div class="form-group">
-          <label>Your Service Title *</label>
-          <input type="text" class="form-input" placeholder="e.g. Expert Civil Engineer — 10 years exp" id="vTitle" />
-        </div>
-        <div class="form-group">
-          <label>City *</label>
-          <select class="form-input" id="vCity">
-            <option value="">Select your city</option>
-            <option>Lahore</option>
-            <option>Karachi</option>
-            <option>Islamabad</option>
-            <option>Faisalabad</option>
-            <option>Multan</option>
-            <option>Rawalpindi</option>
-            <option>Peshawar</option>
-            <option>Quetta</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Starting Price (Rs.) *</label>
-          <input type="number" class="form-input" placeholder="e.g. 2000" id="vPrice" />
-        </div>
-        <div class="form-group">
-          <label>Booking Type *</label>
-          <div class="radio-group">
-            <label><input type="radio" name="bookingType" value="fixed" checked /> Fixed Price Only</label>
-            <label><input type="radio" name="bookingType" value="bid" /> Accepts Bids</label>
-            <label><input type="radio" name="bookingType" value="both" /> Both</label>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>About You / Your Service *</label>
-          <textarea class="form-input" rows="4" placeholder="Describe your expertise, experience, and what makes you stand out..." id="vBio"></textarea>
-        </div>
-        <div class="form-group">
-          <label>CNIC Number (for verification) *</label>
-          <input type="text" class="form-input" placeholder="XXXXX-XXXXXXX-X" id="vCnic" />
-        </div>
-        <div class="form-group">
-          <label>Raast / Bank Account for Payments *</label>
-          <input type="text" class="form-input" placeholder="Your Raast ID or bank account" id="vPayment" />
-        </div>
-
-        <button class="btn-primary btn-large full-width" onclick="submitVendorForm()">
-          Submit for Verification →
-        </button>
+        <button class="btn btn-primary btn-full btn-lg" style="margin-top:8px" onclick="submitVendor()">Submit for Verification →</button>
         <p class="form-note">✅ Free for first 3 months · Verified within 24 hours · Instant Raast payments</p>
       </div>
-
-      <div class="vendor-form-side">
-        <div class="side-info-card">
-          <h3>Why Join Hubmend?</h3>
-          <div class="side-benefit">
-            <span>💰</span>
-            <div><strong>Earn More</strong><p>Set your own rates. Top vendors earn Rs. 3 lakh+/month.</p></div>
-          </div>
-          <div class="side-benefit">
-            <span>🔐</span>
-            <div><strong>Secure Payments</strong><p>Get paid instantly via Raast after every job. No chasing clients.</p></div>
-          </div>
-          <div class="side-benefit">
-            <span>⭐</span>
-            <div><strong>Build Your Brand</strong><p>Verified badge + reviews = more clients automatically.</p></div>
-          </div>
-          <div class="side-benefit">
-            <span>📱</span>
-            <div><strong>All-in-One App</strong><p>Manage bookings, chat with clients, track earnings — one app.</p></div>
-          </div>
+      <div class="vside-card">
+        <h3>Why Join Hubmend?</h3>
+        <div class="vbenefit"><span class="vbenefit-icon">💰</span><div><h4>Earn More</h4><p>Set your own rates. Top vendors earn Rs. 3 lakh+ per month.</p></div></div>
+        <div class="vbenefit"><span class="vbenefit-icon">🔐</span><div><h4>Instant Payments</h4><p>Get paid via Raast immediately after every job. No chasing.</p></div></div>
+        <div class="vbenefit"><span class="vbenefit-icon">⭐</span><div><h4>Build Your Brand</h4><p>Verified badge + reviews = more clients automatically.</p></div></div>
+        <div class="vbenefit"><span class="vbenefit-icon">📱</span><div><h4>All-in-One Platform</h4><p>Manage bookings, chat with clients, track earnings — one app.</p></div></div>
+        <div class="vbenefit"><span class="vbenefit-icon">🛡️</span><div><h4>Dispute Protection</h4><p>Our team resolves any issues — you're always protected.</p></div></div>
+        <div style="background:var(--blue-light);border-radius:var(--r12);padding:20px;margin-top:24px;text-align:center">
+          <div style="font-size:13px;color:var(--gray-500);margin-bottom:6px">Join 10,000+ vendors already earning</div>
+          <div style="font-family:var(--serif);font-size:32px;font-weight:800;color:var(--gray-900)">Rs. 85K<span style="font-size:16px;color:var(--gray-400)">/avg/month</span></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PAGE: ADMIN PANEL
-══════════════════════════════════════════════════════ -->
-<div id="page-admin" class="page">
-  <div class="admin-layout">
-    <aside class="admin-sidebar">
-      <div class="admin-logo">⬡ Hubmend <span>Admin</span></div>
+<!-- ═══ ADMIN PANEL ═══ -->
+<div id="pg-admin" class="page">
+  <div class="admin-wrap">
+    <aside class="admin-side">
+      <div class="admin-logo"><div class="logo"><div class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 3L4 9v12h16V9L12 3z"/><path d="M9 21V12h6v9"/></svg></div><span class="logo-text">Hubmend</span></div></div>
       <nav class="admin-nav">
-        <a href="#" class="admin-nav-item active" onclick="showAdminTab('dashboard')">📊 Dashboard</a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('vendors')">👷 Vendors</a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('customers')">👤 Customers</a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('bookings')">📋 Bookings</a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('payments')">💳 Payments</a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('disputes')">⚠️ Disputes</a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('bids')">🏷️ Bids</a>
+        <button class="anav active" onclick="showTab('dashboard',this)">📊 Dashboard</button>
+        <button class="anav" onclick="showTab('vendors',this)">👷 Vendors</button>
+        <button class="anav" onclick="showTab('customers',this)">👤 Customers</button>
+        <button class="anav" onclick="showTab('bookings',this)">📋 Bookings</button>
+        <button class="anav" onclick="showTab('payments',this)">💳 Payments</button>
+        <button class="anav" onclick="showTab('disputes',this)">⚠️ Disputes</button>
+        <button class="anav" onclick="showTab('bids',this)">🏷️ Bids</button>
+        <div style="margin-top:auto;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);margin:auto 0 0">
+          <button class="anav" onclick="showPg('home')" style="color:rgba(255,87,87,.7)">← Exit Admin</button>
+        </div>
       </nav>
-      <button class="admin-logout" onclick="showPage('home')">← Exit Admin</button>
     </aside>
-
     <main class="admin-main">
-      <!-- DASHBOARD TAB -->
-      <div id="admin-dashboard" class="admin-tab active">
-        <h1 class="admin-page-title">Dashboard Overview</h1>
-        <div class="admin-stats-grid">
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">👷</div>
-            <div class="admin-stat-info">
-              <span class="admin-stat-num">1,247</span>
-              <span class="admin-stat-label">Total Vendors</span>
-            </div>
-            <span class="admin-stat-trend up">+12%</span>
+      <div class="admin-content">
+
+        <!-- DASHBOARD -->
+        <div id="tab-dashboard" class="atab active">
+          <h1 class="admin-title">Dashboard Overview</h1>
+          <div class="stats-grid">
+            <div class="scard"><div class="scard-num">1,247</div><div class="scard-label">Total Vendors</div><span class="scard-trend trend-up">+12% this month</span></div>
+            <div class="scard"><div class="scard-num">8,934</div><div class="scard-label">Total Customers</div><span class="scard-trend trend-up">+24% this month</span></div>
+            <div class="scard"><div class="scard-num">3,421</div><div class="scard-label">Total Bookings</div><span class="scard-trend trend-up">+18% this month</span></div>
+            <div class="scard scard-hl"><div class="scard-num">Rs. 2.6M</div><div class="scard-label">Total Revenue</div><span class="scard-trend trend-up">+31% this month</span></div>
+            <div class="scard"><div class="scard-num">47</div><div class="scard-label">Pending Verifications</div><span class="scard-trend trend-warn">Needs action</span></div>
+            <div class="scard"><div class="scard-num">8</div><div class="scard-label">Open Disputes</div><span class="scard-trend trend-down">Review needed</span></div>
           </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">👤</div>
-            <div class="admin-stat-info">
-              <span class="admin-stat-num">8,934</span>
-              <span class="admin-stat-label">Total Customers</span>
-            </div>
-            <span class="admin-stat-trend up">+24%</span>
-          </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">📋</div>
-            <div class="admin-stat-info">
-              <span class="admin-stat-num">3,421</span>
-              <span class="admin-stat-label">Total Bookings</span>
-            </div>
-            <span class="admin-stat-trend up">+18%</span>
-          </div>
-          <div class="admin-stat-card highlight">
-            <div class="admin-stat-icon">💰</div>
-            <div class="admin-stat-info">
-              <span class="admin-stat-num">Rs. 2.6M</span>
-              <span class="admin-stat-label">Total Revenue</span>
-            </div>
-            <span class="admin-stat-trend up">+31%</span>
-          </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">⏳</div>
-            <div class="admin-stat-info">
-              <span class="admin-stat-num">47</span>
-              <span class="admin-stat-label">Pending Verifications</span>
-            </div>
-            <span class="admin-stat-trend warning">Action needed</span>
-          </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon">⚠️</div>
-            <div class="admin-stat-info">
-              <span class="admin-stat-num">8</span>
-              <span class="admin-stat-label">Open Disputes</span>
-            </div>
-            <span class="admin-stat-trend down">Needs review</span>
+          <div class="table-wrap">
+            <div class="table-hdr"><h3>Recent Bookings</h3></div>
+            <table><thead><tr><th>ID</th><th>Customer</th><th>Vendor</th><th>Service</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead><tbody id="db-bookings"></tbody></table>
           </div>
         </div>
 
-        <div class="admin-recent">
-          <h2>Recent Bookings</h2>
-          <table class="admin-table">
-            <thead>
-              <tr><th>ID</th><th>Customer</th><th>Vendor</th><th>Service</th><th>Amount</th><th>Status</th><th>Action</th></tr>
-            </thead>
-            <tbody id="recentBookingsTable"></tbody>
-          </table>
+        <!-- VENDORS -->
+        <div id="tab-vendors" class="atab">
+          <div class="tab-hdr"><h1 class="admin-title" style="margin-bottom:0">Vendor Management</h1><input type="text" class="admin-search" placeholder="Search vendors..."/></div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Category</th><th>City</th><th>Rating</th><th>Bookings</th><th>Status</th><th>Actions</th></tr></thead><tbody id="t-vendors"></tbody></table></div>
         </div>
-      </div>
 
-      <!-- VENDORS TAB -->
-      <div id="admin-vendors" class="admin-tab">
-        <div class="admin-tab-header">
-          <h1 class="admin-page-title">Vendor Management</h1>
-          <input type="text" placeholder="Search vendors..." class="admin-search" />
+        <!-- CUSTOMERS -->
+        <div id="tab-customers" class="atab">
+          <div class="tab-hdr"><h1 class="admin-title" style="margin-bottom:0">Customer Management</h1><input type="text" class="admin-search" placeholder="Search customers..."/></div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>City</th><th>Bookings</th><th>Joined</th><th>Status</th></tr></thead><tbody id="t-customers"></tbody></table>
         </div>
-        <table class="admin-table">
-          <thead>
-            <tr><th>Name</th><th>Category</th><th>City</th><th>Rating</th><th>Bookings</th><th>Status</th><th>Actions</th></tr>
-          </thead>
-          <tbody id="vendorsTable"></tbody>
-        </table>
-      </div>
 
-      <!-- BOOKINGS TAB -->
-      <div id="admin-bookings" class="admin-tab">
-        <h1 class="admin-page-title">All Bookings</h1>
-        <table class="admin-table">
-          <thead>
-            <tr><th>ID</th><th>Customer</th><th>Vendor</th><th>Service</th><th>Date</th><th>Amount</th><th>Status</th></tr>
-          </thead>
-          <tbody id="bookingsTable"></tbody>
-        </table>
-      </div>
-
-      <!-- PAYMENTS TAB -->
-      <div id="admin-payments" class="admin-tab">
-        <h1 class="admin-page-title">Payment Management</h1>
-        <div class="payments-summary">
-          <div class="payment-summary-card">
-            <h3>In Escrow</h3>
-            <div class="payment-big">Rs. 340,000</div>
-          </div>
-          <div class="payment-summary-card">
-            <h3>Released Today</h3>
-            <div class="payment-big">Rs. 128,500</div>
-          </div>
-          <div class="payment-summary-card highlight">
-            <h3>Platform Revenue</h3>
-            <div class="payment-big">Rs. 51,300</div>
-          </div>
+        <!-- BOOKINGS -->
+        <div id="tab-bookings" class="atab">
+          <h1 class="admin-title">All Bookings</h1>
+          <div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Vendor</th><th>Service</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody id="t-bookings"></tbody></table></div>
         </div>
-        <table class="admin-table">
-          <thead>
-            <tr><th>Transaction ID</th><th>Vendor</th><th>Amount</th><th>Platform Cut</th><th>Method</th><th>Status</th></tr>
-          </thead>
-          <tbody id="paymentsTable"></tbody>
-        </table>
-      </div>
 
-      <!-- DISPUTES TAB -->
-      <div id="admin-disputes" class="admin-tab">
-        <h1 class="admin-page-title">Dispute Resolution</h1>
-        <div class="disputes-list" id="disputesList"></div>
-      </div>
+        <!-- PAYMENTS -->
+        <div id="tab-payments" class="atab">
+          <h1 class="admin-title">Payment Management</h1>
+          <div class="pay-summary">
+            <div class="pay-scard"><h4>In Escrow</h4><div class="big">Rs. 340,000</div></div>
+            <div class="pay-scard"><h4>Released Today</h4><div class="big">Rs. 128,500</div></div>
+            <div class="pay-scard hl"><h4>Platform Revenue</h4><div class="big">Rs. 51,300</div></div>
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Transaction ID</th><th>Vendor</th><th>Amount</th><th>Platform Cut (15%)</th><th>Method</th><th>Status</th></tr></thead><tbody id="t-payments"></tbody></table></div>
+        </div>
 
-      <!-- BIDS TAB -->
-      <div id="admin-bids" class="admin-tab">
-        <h1 class="admin-page-title">Active Bids</h1>
-        <table class="admin-table">
-          <thead>
-            <tr><th>Job Title</th><th>Customer</th><th>Budget</th><th>Bids</th><th>Status</th><th>Action</th></tr>
-          </thead>
-          <tbody id="bidsTable"></tbody>
-        </table>
-      </div>
+        <!-- DISPUTES -->
+        <div id="tab-disputes" class="atab">
+          <h1 class="admin-title">Dispute Resolution</h1>
+          <div id="t-disputes"></div>
+        </div>
 
-      <!-- CUSTOMERS TAB -->
-      <div id="admin-customers" class="admin-tab">
-        <h1 class="admin-page-title">Customer Management</h1>
-        <table class="admin-table">
-          <thead>
-            <tr><th>Name</th><th>Email</th><th>City</th><th>Bookings</th><th>Joined</th><th>Status</th></tr>
-          </thead>
-          <tbody id="customersTable"></tbody>
-        </table>
-      </div>
+        <!-- BIDS -->
+        <div id="tab-bids" class="atab">
+          <h1 class="admin-title">Active Bids</h1>
+          <div class="table-wrap"><table><thead><tr><th>Job Title</th><th>Customer</th><th>Budget</th><th>Bids Received</th><th>Status</th><th>Action</th></tr></thead><tbody id="t-bids"></tbody></table></div>
+        </div>
 
+      </div>
     </main>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     MODALS
-══════════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+<!-- MODALS -->
+<div class="modal-ov" id="mainModal" onclick="closeModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <div id="modalContent"></div>
+    <div id="modalBody"></div>
   </div>
 </div>
 
-<!-- Booking Modal -->
-<div class="modal-overlay" id="bookingOverlay" onclick="closeBooking()">
-  <div class="modal-box modal-large" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeBooking()">✕</button>
-    <div id="bookingContent"></div>
-  </div>
-</div>
-
-<!-- Toast -->
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- Admin Login Trigger (hidden) -->
-<div style="position:fixed;bottom:10px;right:10px;opacity:0.1;font-size:10px;cursor:pointer" onclick="checkAdminAccess()">admin</div>
+<!-- Hidden admin trigger -->
+<div style="position:fixed;bottom:8px;right:8px;opacity:0;font-size:9px;cursor:pointer;z-index:1" onclick="adminAccess()">⚙</div>
 
-<script src="scripts/data.js"></script>
-<script src="scripts/app.js"></script>
+<script>
+// ═══ DATA ═══
+const VENDORS=[
+  {id:1,name:'Dr. Ayesha Malik',init:'AM',title:'MBBS, FCPS — General Physician',cat:'Medical',city:'Lahore',rating:4.9,revs:312,bookings:890,price:2000,bio:'15+ years of clinical experience. Specialist in internal medicine and preventive care. Available for online and in-person consultations in Lahore and online nationwide.',type:'both',verified:true,top:true,color:'#0057FF',tags:['Online','In-Person','Emergency']},
+  {id:2,name:'Usman Tariq',init:'UT',title:'Licensed Electrician — 10 Years Exp',cat:'Home Services',city:'Karachi',rating:4.8,revs:201,bookings:534,price:1500,bio:'Expert in residential and commercial electrical work. Available 24/7 for emergencies. All work comes with a 30-day guarantee and proper certification.',type:'both',verified:true,top:false,color:'#F59E0B',tags:['Emergency','Guaranteed','24/7']},
+  {id:3,name:'Advocate Sana Rizvi',init:'SR',title:'LLB — Corporate & Family Law',cat:'Legal',city:'Islamabad',rating:4.7,revs:89,bookings:210,price:5000,bio:'10 years of legal practice. Specializing in corporate law, family disputes, and property cases. Free initial 30-minute consultation for new clients.',type:'fixed',verified:true,top:false,color:'#7C3AED',tags:['Free Consult','Property','Corporate']},
+  {id:4,name:'Eng. Bilal Hussain',init:'BH',title:'Civil Engineer — Structures & Design',cat:'Engineering',city:'Faisalabad',rating:4.9,revs:156,bookings:320,price:8000,bio:'Structural engineer with 12 years experience in residential and commercial projects. Licensed by Pakistan Engineering Council (PEC). Specializes in earthquake-resistant design.',type:'both',verified:true,top:true,color:'#00A550',tags:['PEC Licensed','Structural','Commercial']},
+  {id:5,name:'Zara Ahmed',init:'ZA',title:'UI/UX & Graphic Designer',cat:'Design',city:'Lahore',rating:4.8,revs:445,bookings:678,price:3000,bio:'Award-winning designer with 8 years of experience. Worked with 50+ brands across Pakistan and UAE. Specializes in brand identity, UI/UX, and digital marketing assets.',type:'bid',verified:true,top:false,color:'#DB2777',tags:['Branding','UI/UX','Logos']},
+  {id:6,name:'Ahmed Khan',init:'AK',title:'Expert Plumber — All Services',cat:'Home Services',city:'Multan',rating:4.6,revs:178,bookings:412,price:800,bio:'Professional plumbing services for residential and commercial properties. Pipe fitting, leak repair, bathroom installation, water tank services. Quick response guaranteed.',type:'both',verified:true,top:false,color:'#0D9488',tags:['Leak Repair','Installation','Fast']},
+  {id:7,name:'Prof. Nadia Hassan',init:'NH',title:'Mathematics & Physics Tutor',cat:'Education',city:'Rawalpindi',rating:5.0,revs:234,bookings:567,price:1200,bio:'PhD in Mathematics, 10 years teaching experience. Specializing in O/A-level, FSc, and university-level mathematics and physics. Online and in-person sessions available.',type:'fixed',verified:true,top:true,color:'#DC2626',tags:['O-Level','A-Level','University']},
+  {id:8,name:'Imran Sheikh',init:'IS',title:'Full Stack Developer — React & Node.js',cat:'Technology',city:'Karachi',rating:4.7,revs:112,bookings:289,price:5000,bio:'5+ years in web and mobile development. Built 40+ projects across Pakistan and internationally. Expert in React, Node.js, Firebase, React Native, and cloud deployment.',type:'bid',verified:true,top:false,color:'#1E3A8A',tags:['React','Node.js','Mobile Apps']},
+  {id:9,name:'CA Farhan Ali',init:'FA',title:'Chartered Accountant — Tax & Finance',cat:'Finance',city:'Lahore',rating:4.8,revs:67,bookings:145,price:4000,bio:'ICAP-certified Chartered Accountant with 8 years in taxation, audit, and financial planning. Specializes in GST, income tax, corporate filings, and business advisory.',type:'fixed',verified:true,top:false,color:'#0057FF',tags:['Tax Filing','GST','Audit']},
+  {id:10,name:'Dr. Hamid Nawaz',init:'HN',title:'Pediatrician — Child Specialist',cat:'Medical',city:'Peshawar',rating:4.9,revs:289,bookings:720,price:2500,bio:'MBBS, DCH — 18 years of experience in child healthcare. Specialist in child growth, vaccination schedules, and pediatric illnesses. Online consultations available Pakistan-wide.',type:'fixed',verified:true,top:false,color:'#00A550',tags:['Children','Vaccination','Online']},
+  {id:11,name:'Rizwan Carpenter',init:'RC',title:'Master Carpenter & Furniture Maker',cat:'Home Services',city:'Quetta',rating:4.5,revs:98,bookings:210,price:1000,bio:'20+ years of craftsmanship in custom furniture and woodwork. Specializes in kitchens, wardrobes, doors, and bespoke furniture. Uses quality materials with long-lasting finishes.',type:'both',verified:true,top:false,color:'#D97706',tags:['Custom','Kitchen','Wardrobes']},
+  {id:12,name:'Sara Malik',init:'SM',title:'Interior Designer — Residential & Commercial',cat:'Design',city:'Islamabad',rating:4.8,revs:134,bookings:198,price:10000,bio:'Award-winning interior designer who has transformed 100+ homes and offices across Pakistan. Offers 3D visualization before work begins. Handles complete project management.',type:'bid',verified:false,top:false,color:'#DB2777',tags:['Residential','3D Design','Renovation']},
+];
+
+const BOOKINGS_D=[
+  {id:'BK-001',customer:'Fatima Zahra',vendor:'Dr. Ayesha Malik',service:'Medical Consultation',amount:'Rs. 2,000',status:'completed',date:'2026-04-28'},
+  {id:'BK-002',customer:'Omar Farooq',vendor:'Usman Tariq',service:'Electrical Repair',amount:'Rs. 1,500',status:'active',date:'2026-04-29'},
+  {id:'BK-003',customer:'Aisha Bibi',vendor:'Advocate Sana Rizvi',service:'Legal Consultation',amount:'Rs. 5,000',status:'pending',date:'2026-04-30'},
+  {id:'BK-004',customer:'Tariq Mehmood',vendor:'Eng. Bilal Hussain',service:'Construction Design',amount:'Rs. 8,000',status:'active',date:'2026-04-27'},
+  {id:'BK-005',customer:'Mehreen Khan',vendor:'Zara Ahmed',service:'Logo Design',amount:'Rs. 3,500',status:'completed',date:'2026-04-26'},
+  {id:'BK-006',customer:'Shahzad Ali',vendor:'Ahmed Khan',service:'Plumbing Fix',amount:'Rs. 1,000',status:'cancelled',date:'2026-04-25'},
+];
+
+const VENDORS_D=[
+  {name:'Dr. Ayesha Malik',cat:'Medical',city:'Lahore',rating:'4.9★',bookings:890,status:'active'},
+  {name:'Usman Tariq',cat:'Home Services',city:'Karachi',rating:'4.8★',bookings:534,status:'active'},
+  {name:'New Vendor (Unverified)',cat:'Technology',city:'Lahore',rating:'New',bookings:0,status:'pending'},
+  {name:'Advocate Sana Rizvi',cat:'Legal',city:'Islamabad',rating:'4.7★',bookings:210,status:'active'},
+  {name:'Suspended Account',cat:'Design',city:'Karachi',rating:'2.1★',bookings:12,status:'banned'},
+];
+
+const PAYMENTS_D=[
+  {id:'TXN-001',vendor:'Dr. Ayesha Malik',amount:'Rs. 2,000',cut:'Rs. 300',method:'Raast',status:'released'},
+  {id:'TXN-002',vendor:'Usman Tariq',amount:'Rs. 1,500',cut:'Rs. 225',method:'NayaPay',status:'escrow'},
+  {id:'TXN-003',vendor:'Eng. Bilal Hussain',amount:'Rs. 8,000',cut:'Rs. 1,200',method:'Raast',status:'released'},
+  {id:'TXN-004',vendor:'Zara Ahmed',amount:'Rs. 3,500',cut:'Rs. 525',method:'JazzCash',status:'released'},
+  {id:'TXN-005',vendor:'Prof. Nadia Hassan',amount:'Rs. 1,200',cut:'Rs. 180',method:'Raast',status:'escrow'},
+];
+
+const DISPUTES_D=[
+  {id:'DSP-001',title:'Work not completed — Plumbing',customer:'Shahzad Ali',vendor:'Ahmed Khan',amount:'Rs. 1,000',reason:'Vendor left midway through the job without completing the pipe repair. The leak is still present.',date:'2026-04-25'},
+  {id:'DSP-002',title:'Quality issue — Electrical wiring',customer:'Sara Noor',vendor:'Usman Tariq',amount:'Rs. 1,500',reason:'A short circuit occurred 2 days after the electrical work was completed. The vendor needs to redo the wiring.',date:'2026-04-27'},
+];
+
+const BIDS_D=[
+  {title:'Website Development for Restaurant',customer:'Kamran Foods',budget:'Rs. 50,000',bids:7,status:'open'},
+  {title:'Interior Design — 3 Bedroom Apartment',customer:'Hina Malik',budget:'Rs. 120,000',bids:4,status:'open'},
+  {title:'Legal Help — Property Dispute',customer:'Tariq Hussain',budget:'Rs. 15,000',bids:2,status:'open'},
+  {title:'Logo + Brand Identity Design',customer:'TechStart PK',budget:'Rs. 8,000',bids:11,status:'closing'},
+];
+
+const CUSTOMERS_D=[
+  {name:'Fatima Zahra',email:'fatima@email.com',city:'Lahore',bookings:8,joined:'Jan 2026',status:'active'},
+  {name:'Omar Farooq',email:'omar@email.com',city:'Karachi',bookings:3,joined:'Feb 2026',status:'active'},
+  {name:'Aisha Bibi',email:'aisha@email.com',city:'Islamabad',bookings:1,joined:'Apr 2026',status:'active'},
+  {name:'Tariq Mehmood',email:'tariq@email.com',city:'Faisalabad',bookings:12,joined:'Nov 2025',status:'active'},
+];
+
+// ═══ STATE ═══
+let filtered=[...VENDORS];
+let currentVendor=null;
+
+// ═══ ROUTING ═══
+function showPg(pg){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+pg).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(pg==='browse')renderAll();
+  if(pg==='admin')initAdmin();
+}
+
+// ═══ NAV ═══
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').style.boxShadow=window.scrollY>10?'var(--shadow)':'none';
+});
+function toggleMob(){document.getElementById('mobMenu').classList.toggle('open')}
+
+// ═══ SEARCH ═══
+function doSearch(){
+  const q=document.getElementById('hService').value||document.getElementById('navQ').value;
+  const c=document.getElementById('hCity').value;
+  if(q)document.getElementById('fSearch').value=q;
+  if(c)document.getElementById('fCity').value=c;
+  showPg('browse');applyF();
+}
+function qSearch(t){document.getElementById('fSearch').value=t;showPg('browse');applyF();}
+function filterCat(c){document.getElementById('fCat').value=c;showPg('browse');applyF();}
+
+// ═══ VENDOR CARD ═══
+function vCard(v){
+  const typeBadge=v.type==='bid'?'<span class="badge badge-b">Accepts Bids</span>':v.type==='both'?'<span class="badge badge-b">Fixed + Bids</span>':'';
+  return`<div class="vcard" onclick="showProfile(${v.id})">
+    <div class="vcard-top">
+      <div class="vcard-head">
+        <div class="vcard-avatar" style="background:${v.color}">${v.init}</div>
+        <div class="vcard-meta">
+          <h3>${v.name}</h3>
+          <div class="vsub">${v.title}</div>
+          <div class="badges">
+            ${v.verified?'<span class="badge badge-v">✓ Verified</span>':''}
+            ${v.top?'<span class="badge badge-t">⭐ Top Rated</span>':''}
+            ${typeBadge}
+            <span class="badge badge-cat">${v.cat}</span>
+          </div>
+        </div>
+      </div>
+      <div class="vcard-stats">
+        <div class="vcard-rating"><span class="star">★</span>${v.rating} <span class="revs">(${v.revs})</span></div>
+        <div class="vcard-loc">📍 ${v.city}</div>
+      </div>
+      <div class="vcard-price">From <strong>Rs. ${v.price.toLocaleString()}</strong></div>
+    </div>
+    <div class="vcard-divider"></div>
+    <div class="vcard-foot">
+      <button class="btn btn-primary" onclick="event.stopPropagation();showProfile(${v.id})">Book Now</button>
+      <button class="btn btn-ghost" onclick="event.stopPropagation();showProfile(${v.id})">View Profile</button>
+    </div>
+  </div>`;
+}
+
+function renderFeatured(){
+  const el=document.getElementById('featuredVendors');
+  if(!el)return;
+  el.innerHTML=VENDORS.filter(v=>v.top||v.rating>=4.8).slice(0,4).map(vCard).join('');
+}
+
+function renderAll(){
+  const el=document.getElementById('allVendors');
+  if(!el)return;
+  el.innerHTML=filtered.length?filtered.map(vCard).join(''):'<div style="padding:60px;text-align:center;color:var(--gray-400);grid-column:1/-1"><div style="font-size:48px;margin-bottom:16px">🔍</div><h3 style="font-size:20px;margin-bottom:8px;color:var(--gray-700)">No experts found</h3><p>Try adjusting your filters</p></div>';
+  document.getElementById('resCount').textContent=`Showing ${filtered.length} expert${filtered.length!==1?'s':''}`;
+}
+
+// ═══ FILTERS ═══
+function applyF(){
+  const q=(document.getElementById('fSearch')?.value||'').toLowerCase();
+  const cat=document.getElementById('fCat')?.value||'';
+  const city=document.getElementById('fCity')?.value||'';
+  const minR=parseFloat(document.getElementById('fRating')?.value||'0');
+  const maxP=parseInt(document.getElementById('fPrice')?.value||'50000');
+  const fixOk=document.getElementById('fFixed')?.checked;
+  const bidOk=document.getElementById('fBid')?.checked;
+  filtered=VENDORS.filter(v=>{
+    if(q&&!v.name.toLowerCase().includes(q)&&!v.title.toLowerCase().includes(q)&&!v.cat.toLowerCase().includes(q))return false;
+    if(cat&&v.cat!==cat)return false;
+    if(city&&v.city!==city)return false;
+    if(v.rating<minR)return false;
+    if(v.price>maxP)return false;
+    if(!fixOk&&(v.type==='fixed'||v.type==='both'))return false;
+    if(!bidOk&&(v.type==='bid'||v.type==='both'))return false;
+    return true;
+  });
+  renderAll();
+}
+function updatePrice(v){document.getElementById('fPriceLabel').textContent=`Up to Rs. ${parseInt(v).toLocaleString()}`;}
+function resetF(){
+  ['fSearch','fCity'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['fCat','fRating'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='0'||'';});
+  const fp=document.getElementById('fPrice');if(fp){fp.value='50000';updatePrice('50000');}
+  ['fFixed','fBid'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=true;});
+  filtered=[...VENDORS];renderAll();
+}
+function sortV(by){
+  if(by==='rating')filtered.sort((a,b)=>b.rating-a.rating);
+  else if(by==='price_low')filtered.sort((a,b)=>a.price-b.price);
+  else if(by==='price_high')filtered.sort((a,b)=>b.price-a.price);
+  renderAll();
+}
+
+// ═══ PROFILE ═══
+function showProfile(id){
+  currentVendor=VENDORS.find(v=>v.id===id);
+  if(!currentVendor)return;
+  const v=currentVendor;
+  const reviews=[
+    {auth:'Ahmed K.',stars:'★★★★★',text:'Absolutely professional. Exceeded my expectations. Highly recommended to anyone looking for quality work.'},
+    {auth:'Sara M.',stars:'★★★★★',text:'Exceptional service, on time and within budget. Will definitely book again for my next project.'},
+    {auth:'Omar F.',stars:'★★★★☆',text:'Great work overall. Communication was smooth and the final result was exactly what I needed.'},
+  ];
+  document.getElementById('profileContent').innerHTML=`
+    <div>
+      <div class="profile-hdr">
+        <div class="profile-av" style="background:${v.color}">${v.init}</div>
+        <div class="profile-info">
+          <h1>${v.name}</h1>
+          <div class="ptitle">${v.title}</div>
+          <div class="badges" style="margin-bottom:14px">
+            ${v.verified?'<span class="badge badge-v">✓ Verified</span>':''}
+            ${v.top?'<span class="badge badge-t">⭐ Top Rated</span>':''}
+            <span class="badge badge-cat">📍 ${v.city}</span>
+            <span class="badge badge-cat">🗂 ${v.cat}</span>
+            ${v.tags.map(t=>`<span class="badge badge-cat">${t}</span>`).join('')}
+          </div>
+          <div class="profile-stats">
+            <div class="pstat"><strong>★ ${v.rating}</strong><span>Rating</span></div>
+            <div class="pstat"><strong>${v.revs}</strong><span>Reviews</span></div>
+            <div class="pstat"><strong>${v.bookings}</strong><span>Bookings</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-box">
+        <h2>About</h2>
+        <p style="font-size:15px;color:var(--gray-600);line-height:1.7">${v.bio}</p>
+      </div>
+      <div class="card-box">
+        <h2>Reviews (${v.revs})</h2>
+        ${reviews.map(r=>`<div class="review-item"><div class="rev-hdr"><span class="rev-author">${r.auth}</span><span class="rev-stars">${r.stars}</span></div><div class="rev-text">${r.text}</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="booking-sticky">
+      <div class="booking-card">
+        <h2>Book ${v.name.split(' ')[0]}</h2>
+        <div class="bprice">Rs. ${v.price.toLocaleString()}<span> starting</span></div>
+        ${v.type!=='fixed'?`<div class="btabs"><button class="btab active" onclick="switchBTab('fixed',this)">Fixed Price</button><button class="btab" onclick="switchBTab('bid',this)">Place a Bid</button></div>`:''}
+        <div class="bform">
+          <input type="text" class="finput" placeholder="Your Name" id="bName"/>
+          <input type="tel" class="finput" placeholder="Phone Number" id="bPhone"/>
+          <input type="date" class="finput" id="bDate"/>
+          <input type="time" class="finput" id="bTime"/>
+          <textarea class="finput" rows="3" placeholder="Describe your requirement in detail..." id="bDesc"></textarea>
+          <div class="bid-row" id="bidRow"><input type="number" class="finput" placeholder="Your bid amount (Rs.)" id="bBid"/></div>
+          <button class="btn btn-primary btn-full btn-lg" onclick="submitBooking()">🔐 Book Securely — Escrow Protected</button>
+          <div class="escrow-note">💡 Your payment is held safely until job is confirmed complete</div>
+        </div>
+      </div>
+    </div>
+  `;
+  showPg('profile');
+}
+
+function switchBTab(type,btn){
+  document.querySelectorAll('.btab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const br=document.getElementById('bidRow');
+  if(br)br.classList.toggle('show',type==='bid');
+}
+
+function submitBooking(){
+  const n=document.getElementById('bName')?.value;
+  const p=document.getElementById('bPhone')?.value;
+  const d=document.getElementById('bDate')?.value;
+  if(!n||!p||!d){showToast('⚠️ Please fill all required fields');return;}
+  showToast('✅ Booking confirmed! SMS sent to '+p);
+  setTimeout(()=>showPg('browse'),1800);
+}
+
+// ═══ VENDOR FORM ═══
+function submitVendor(){
+  const fields=['vName','vPhone','vEmail','vCat','vTitle','vCity','vPrice','vBio','vCnic','vRaast'];
+  for(const f of fields){if(!document.getElementById(f)?.value){showToast('⚠️ Please fill all required fields');return;}}
+  showToast('✅ Application submitted! Verification within 24 hours.');
+  setTimeout(()=>showPg('home'),2000);
+}
+
+// ═══ MODALS ═══
+function showModal(type){
+  const b=document.getElementById('modalBody');
+  if(type==='login'){
+    b.innerHTML=`<div class="modal-title">Welcome Back</div><div class="modal-sub">Sign in to your Hubmend account</div><div class="mform"><input type="tel" class="finput" placeholder="Phone Number" id="lPhone"/><input type="password" class="finput" placeholder="Password" id="lPass"/><button class="btn btn-primary btn-full btn-lg" onclick="doLogin()">Log In</button><div class="divider-or">or</div><button class="btn btn-ghost btn-full" onclick="showModal('otp')">Login with OTP</button></div><div class="modal-foot">No account? <a onclick="showModal('signup')">Join Free</a> &nbsp;·&nbsp; <a>Forgot Password?</a></div>`;
+  }else if(type==='signup'){
+    b.innerHTML=`<div class="modal-title">Join Hubmend</div><div class="modal-sub">Create your free account in seconds</div><div class="mform"><input type="text" class="finput" placeholder="Full Name" id="sName"/><input type="tel" class="finput" placeholder="Phone Number" id="sPhone"/><input type="email" class="finput" placeholder="Email Address" id="sEmail"/><input type="password" class="finput" placeholder="Create Password" id="sPass"/><p style="font-size:12px;color:var(--gray-400)">By joining you agree to our <a style="color:var(--blue)">Terms</a> and <a style="color:var(--blue)">Privacy Policy</a></p><button class="btn btn-primary btn-full btn-lg" onclick="doSignup()">Create Free Account</button><div class="divider-or">or</div><button class="btn btn-ghost btn-full" onclick="showPg('vendor');closeModal()">Join as a Vendor</button></div><div class="modal-foot">Already have an account? <a onclick="showModal('login')">Log In</a></div>`;
+  }else if(type==='otp'){
+    b.innerHTML=`<div class="modal-title">Verify Your Phone</div><div class="modal-sub">We sent a 6-digit code to your phone number</div><div class="mform"><input type="number" class="finput" placeholder="Enter 6-digit OTP" id="otpVal" style="font-size:24px;text-align:center;letter-spacing:8px"/><button class="btn btn-primary btn-full btn-lg" onclick="verifyOTP()">Verify & Continue</button><button class="btn btn-ghost btn-full" onclick="showToast('OTP resent!')">Resend OTP</button></div>`;
+  }
+  document.getElementById('mainModal').classList.add('open');
+}
+function closeModal(){document.getElementById('mainModal').classList.remove('open');}
+function doLogin(){
+  const p=document.getElementById('lPhone')?.value;
+  if(!p){showToast('⚠️ Enter your phone number');return;}
+  showToast('✅ Logged in successfully!');closeModal();
+}
+function doSignup(){
+  const n=document.getElementById('sName')?.value;
+  const p=document.getElementById('sPhone')?.value;
+  if(!n||!p){showToast('⚠️ Fill required fields');return;}
+  showModal('otp');
+}
+function verifyOTP(){
+  const o=document.getElementById('otpVal')?.value;
+  if(!o||o.length<6){showToast('⚠️ Enter valid 6-digit OTP');return;}
+  showToast('✅ Phone verified! Welcome to Hubmend!');closeModal();
+}
+
+// ═══ ADMIN ═══
+function adminAccess(){
+  const p=prompt('Admin Password:');
+  if(p==='admin123')showPg('admin');
+  else if(p!==null)showToast('❌ Wrong password');
+}
+function showTab(tab,btn){
+  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.anav').forEach(n=>n.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  btn.classList.add('active');
+}
+function sBadge(s){const m={active:'s-active',pending:'s-pending',completed:'s-completed',cancelled:'s-cancelled',banned:'s-banned',released:'s-released',escrow:'s-escrow',open:'s-open',closing:'s-pending'};return`<span class="status ${m[s]||'s-pending'}">${s}</span>`;}
+function initAdmin(){
+  // Dashboard bookings
+  const db=document.getElementById('db-bookings');
+  if(db)db.innerHTML=BOOKINGS_D.map(b=>`<tr><td><strong>${b.id}</strong></td><td>${b.customer}</td><td>${b.vendor}</td><td>${b.service}</td><td><strong>${b.amount}</strong></td><td>${sBadge(b.status)}</td><td><div class="act-btns"><button class="act act-view" onclick="showToast('Loading...')">View</button></div></td></tr>`).join('');
+  // Vendors
+  const tv=document.getElementById('t-vendors');
+  if(tv)tv.innerHTML=VENDORS_D.map(v=>`<tr><td><strong>${v.name}</strong></td><td>${v.cat}</td><td>${v.city}</td><td>${v.rating}</td><td>${v.bookings}</td><td>${sBadge(v.status)}</td><td><div class="act-btns">${v.status==='pending'?`<button class="act act-ok" onclick="showToast('✅ Vendor approved!')">Approve</button><button class="act act-del" onclick="showToast('Rejected.')">Reject</button>`:''}<button class="act act-view" onclick="showToast('Loading...')">View</button>${v.status==='active'?`<button class="act act-del" onclick="showToast('Suspended.')">Suspend</button>`:''}</div></td></tr>`).join('');
+  // Customers
+  const tc=document.getElementById('t-customers');
+  if(tc)tc.innerHTML=CUSTOMERS_D.map(c=>`<tr><td><strong>${c.name}</strong></td><td>${c.email}</td><td>${c.city}</td><td>${c.bookings}</td><td>${c.joined}</td><td>${sBadge(c.status)}</td></tr>`).join('');
+  // Bookings
+  const tb=document.getElementById('t-bookings');
+  if(tb)tb.innerHTML=BOOKINGS_D.map(b=>`<tr><td><strong>${b.id}</strong></td><td>${b.customer}</td><td>${b.vendor}</td><td>${b.service}</td><td>${b.date}</td><td><strong>${b.amount}</strong></td><td>${sBadge(b.status)}</td></tr>`).join('');
+  // Payments
+  const tp=document.getElementById('t-payments');
+  if(tp)tp.innerHTML=PAYMENTS_D.map(p=>`<tr><td><strong>${p.id}</strong></td><td>${p.vendor}</td><td><strong>${p.amount}</strong></td><td style="color:var(--green);font-weight:600">${p.cut}</td><td>${p.method}</td><td>${sBadge(p.status)}</td></tr>`).join('');
+  // Disputes
+  const td=document.getElementById('t-disputes');
+  if(td)td.innerHTML=DISPUTES_D.map(d=>`<div class="dispute-card"><h3>${d.title} — <span style="color:var(--gray-400)">${d.id}</span></h3><div class="dispute-meta"><span>👤 ${d.customer}</span><span>👷 ${d.vendor}</span><span>💰 ${d.amount}</span><span>📅 ${d.date}</span></div><p>${d.reason}</p><div class="act-btns"><button class="act act-ok" onclick="showToast('✅ Refund issued.')">Refund Customer</button><button class="act act-view" onclick="showToast('Payment released.')">Release to Vendor</button><button class="act act-del" onclick="showToast('Dispute closed.')">Close Dispute</button></div></div>`).join('');
+  // Bids
+  const tbid=document.getElementById('t-bids');
+  if(tbid)tbid.innerHTML=BIDS_D.map(b=>`<tr><td><strong>${b.title}</strong></td><td>${b.customer}</td><td>${b.budget}</td><td><span class="badge badge-b">${b.bids} bids</span></td><td>${sBadge(b.status)}</td><td><button class="act act-view" onclick="showToast('Loading bids...')">View Bids</button></td></tr>`).join('');
+}
+
+// ═══ TOAST ═══
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded',()=>{
+  renderFeatured();
+  const today=new Date().toISOString().split('T')[0];
+  document.querySelectorAll('input[type="date"]').forEach(el=>el.min=today);
+});
+</script>
 </body>
 </html>
