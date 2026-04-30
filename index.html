@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hubmend — Find Any Service, Anywhere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">Hubmend</span>
+    </a>
+
+    <div class="nav-search">
+      <input type="text" placeholder="Search doctors, engineers, plumbers..." class="nav-search-input" id="navSearch" />
+      <button class="nav-search-btn">Search</button>
+    </div>
+
+    <div class="nav-links">
+      <a href="#" class="nav-link" onclick="showPage('home')">Home</a>
+      <a href="#" class="nav-link" onclick="showPage('services')">Browse</a>
+      <a href="#" class="nav-link" onclick="showPage('how')">How It Works</a>
+      <button class="btn-outline" onclick="showModal('login')">Log In</button>
+      <button class="btn-primary" onclick="showModal('signup')">Join Free</button>
+    </div>
+
+    <button class="hamburger" onclick="toggleMenu()" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="showPage('home');toggleMenu()">Home</a>
+    <a href="#" onclick="showPage('services');toggleMenu()">Browse Services</a>
+    <a href="#" onclick="showPage('how');toggleMenu()">How It Works</a>
+    <a href="#" onclick="showModal('login');toggleMenu()">Log In</a>
+    <a href="#" onclick="showModal('signup');toggleMenu()">Join Free</a>
+    <a href="#" onclick="showPage('vendor');toggleMenu()">Become a Vendor</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-orb orb1"></div>
+      <div class="hero-orb orb2"></div>
+      <div class="hero-orb orb3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">🇵🇰 Pakistan's #1 Service Platform</div>
+      <h1 class="hero-title">
+        Find <span class="gradient-text">Any Expert.</span><br/>
+        Book <span class="gradient-text">Any Service.</span>
+      </h1>
+      <p class="hero-subtitle">
+        Doctors · Engineers · Lawyers · Plumbers · Electricians · Designers<br/>
+        <strong>10,000+ verified professionals</strong> — fixed price or your best bid.
+      </p>
+
+      <div class="hero-search-box">
+        <div class="search-row">
+          <div class="search-field">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="What service do you need?" id="heroService" />
+          </div>
+          <div class="search-field">
+            <span class="search-icon">📍</span>
+            <input type="text" placeholder="Your city" id="heroCity" />
+          </div>
+          <button class="search-btn" onclick="doSearch()">Find Experts</button>
+        </div>
+        <div class="popular-tags">
+          <span>Popular:</span>
+          <button onclick="quickSearch('Doctor')">Doctor</button>
+          <button onclick="quickSearch('Plumber')">Plumber</button>
+          <button onclick="quickSearch('Lawyer')">Lawyer</button>
+          <button onclick="quickSearch('Engineer')">Engineer</button>
+          <button onclick="quickSearch('Designer')">Designer</button>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat"><strong>50K+</strong><span>Happy Clients</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>10K+</strong><span>Verified Experts</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>200+</strong><span>Service Types</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>4.9★</strong><span>Avg Rating</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="section categories-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Browse <span class="gradient-text">All Categories</span></h2>
+        <p>Every professional service you need — in one place</p>
+      </div>
+      <div class="categories-grid">
+        <div class="cat-card" onclick="filterCategory('Medical')">
+          <div class="cat-icon">🏥</div>
+          <h3>Medical</h3>
+          <p>Doctors, Dentists, Therapists</p>
+          <span class="cat-count">1,200+ experts</span>
+        </div>
+        <div class="cat-card" onclick="filterCategory('Legal')">
+          <div class="cat-icon">⚖️</div>
+          <h3>Legal</h3>
+          <p>Lawyers, Consultants, Notaries</p>
+          <span class="cat-count">800+ experts</span>
+        </div>
+        <div class="cat-card" onclick="filterCategory('Engineering')">
+          <div class="cat-icon">⚙️</div>
+          <h3>Engineering</h3>
+          <p>Civil, Software, Mechanical</p>
+          <span class="cat-count">2,100+ experts</span>
+        </div>
+        <div class="cat-card" onclick="filterCategory('Home Services')">
+          <div class="cat-icon">🔧</div>
+          <h3>Home Services</h3>
+          <p>Plumbers, Electricians, Carpenters</p>
+          <span class="cat-count">3,500+ experts</span>
+        </div>
+        <div class="cat-card" onclick="filterCategory('Design')">
+          <div class="cat-icon">🎨</div>
+          <h3>Design</h3>
+          <p>Graphic, Interior, UI/UX</p>
+          <span class="cat-count">900+ experts</span>
+        </div>
+        <div class="cat-card" onclick="filterCategory('Education')">
+          <div class="cat-icon">📚</div>
+          <h3>Education</h3>
+          <p>Tutors, Coaches, Trainers</p>
+          <span class="cat-count">1,500+ experts</span>
+        </div>
+        <div class="cat-card" onclick="filterCategory('Finance')">
+          <div class="cat-icon">💼</div>
+          <h3>Finance</h3>
+          <p>Accountants, Tax Advisors, CFOs</p>
+          <span class="cat-count">600+ experts</span>
+        </div>
+        <div class="cat-card" onclick="filterCategory('Technology')">
+          <div class="cat-icon">💻</div>
+          <h3>Technology</h3>
+          <p>Developers, IT Support, Cyber</p>
+          <span class="cat-count">1,800+ experts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED VENDORS -->
+  <section class="section featured-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Top Rated <span class="gradient-text">Experts</span></h2>
+        <p>Handpicked professionals with verified credentials</p>
+        <button class="btn-outline" onclick="showPage('services')">View All →</button>
+      </div>
+      <div class="vendors-grid" id="featuredVendors"></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section how-section" id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>How <span class="gradient-text">Hubmend</span> Works</h2>
+        <p>Get any service done in 3 simple steps</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <div class="step-icon">🔍</div>
+          <h3>Search & Compare</h3>
+          <p>Browse hundreds of verified professionals. Filter by rating, price, location, and availability.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <div class="step-icon">📋</div>
+          <h3>Book or Bid</h3>
+          <p>Choose fixed price booking or post a job and let experts bid competitively for your project.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <div class="step-icon">✅</div>
+          <h3>Pay Safely & Review</h3>
+          <p>Your payment is held in escrow until the job is done. Release when satisfied. Zero risk.</p>
+        </div>
+      </div>
+      <div class="escrow-banner">
+        <span class="escrow-icon">🔐</span>
+        <div>
+          <strong>100% Secure Escrow Payments</strong>
+          <p>Your money is protected until you confirm the job is done perfectly.</p>
+        </div>
+        <button class="btn-primary" onclick="showModal('signup')">Get Started Free</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- VENDOR CTA -->
+  <section class="section vendor-cta-section">
+    <div class="container">
+      <div class="vendor-cta-card">
+        <div class="vendor-cta-left">
+          <h2>Are You a Professional?</h2>
+          <p>Join 10,000+ experts already earning on Hubmend. Set your own rates, get verified clients, receive payments instantly via Raast.</p>
+          <ul class="vendor-benefits">
+            <li>✅ Free profile setup</li>
+            <li>✅ Verified badge after review</li>
+            <li>✅ Instant Raast payments</li>
+            <li>✅ Build your reputation</li>
+            <li>✅ Fixed price or accept bids</li>
+          </ul>
+          <button class="btn-primary btn-large" onclick="showPage('vendor')">Join as a Vendor →</button>
+        </div>
+        <div class="vendor-cta-right">
+          <div class="earning-card">
+            <p>Average vendor earns</p>
+            <div class="big-earning">Rs. 85,000<span>/month</span></div>
+            <p class="small-text">Top vendors earn Rs. 3,00,000+</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>What People <span class="gradient-text">Say</span></h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Found an amazing civil engineer for my construction project in Lahore. The bidding system got me 40% cheaper than market rate!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">AK</div>
+            <div><strong>Ahmed Khan</strong><span>Lahore</span></div>
+          </div>
+        </div>
+        <div class="testimonial-card featured-testimonial">
+          <div class="stars">★★★★★</div>
+          <p>"As a doctor, Hubmend has completely changed my practice. I get online consultations from across Pakistan. Payments are instant!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">DF</div>
+            <div><strong>Dr. Fatima</strong><span>Karachi</span></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"My electrician cancelled last minute. Found a verified replacement on Hubmend within 20 minutes. Unbelievable platform!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">SR</div>
+            <div><strong>Sara Raza</strong><span>Islamabad</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE: SERVICES / BROWSE
+══════════════════════════════════════════════════════ -->
+<div id="page-services" class="page">
+  <div class="page-hero-small">
+    <div class="container">
+      <h1>Browse <span class="gradient-text">All Services</span></h1>
+      <p>Find verified experts across every category</p>
+    </div>
+  </div>
+
+  <div class="container browse-layout">
+    <!-- FILTERS SIDEBAR -->
+    <aside class="filters-sidebar">
+      <h3>Filters</h3>
+
+      <div class="filter-group">
+        <label>Search</label>
+        <input type="text" placeholder="Service or name..." id="searchInput" oninput="applyFilters()" class="filter-input" />
+      </div>
+
+      <div class="filter-group">
+        <label>Category</label>
+        <select id="catFilter" onchange="applyFilters()" class="filter-select">
+          <option value="">All Categories</option>
+          <option>Medical</option>
+          <option>Legal</option>
+          <option>Engineering</option>
+          <option>Home Services</option>
+          <option>Design</option>
+          <option>Education</option>
+          <option>Finance</option>
+          <option>Technology</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Booking Type</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="fixedFilter" onchange="applyFilters()" checked /> Fixed Price</label>
+          <label><input type="checkbox" id="bidFilter" onchange="applyFilters()" checked /> Accepts Bids</label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <label>Min Rating</label>
+        <select id="ratingFilter" onchange="applyFilters()" class="filter-select">
+          <option value="0">Any Rating</option>
+          <option value="4">4★ and above</option>
+          <option value="4.5">4.5★ and above</option>
+          <option value="4.8">4.8★ and above</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Max Price (Rs.)</label>
+        <input type="range" id="priceFilter" min="500" max="50000" value="50000" oninput="updatePriceLabel(this.value);applyFilters()" class="range-input" />
+        <span id="priceLabel">Up to Rs. 50,000</span>
+      </div>
+
+      <div class="filter-group">
+        <label>City</label>
+        <select id="cityFilter" onchange="applyFilters()" class="filter-select">
+          <option value="">All Cities</option>
+          <option>Lahore</option>
+          <option>Karachi</option>
+          <option>Islamabad</option>
+          <option>Faisalabad</option>
+          <option>Multan</option>
+          <option>Rawalpindi</option>
+          <option>Peshawar</option>
+          <option>Quetta</option>
+        </select>
+      </div>
+
+      <button class="btn-outline full-width" onclick="resetFilters()">Reset Filters</button>
+    </aside>
+
+    <!-- RESULTS -->
+    <div class="results-area">
+      <div class="results-header">
+        <span id="resultsCount">Showing all experts</span>
+        <select class="filter-select" onchange="sortVendors(this.value)">
+          <option value="rating">Sort: Top Rated</option>
+          <option value="price_low">Price: Low to High</option>
+          <option value="price_high">Price: High to Low</option>
+          <option value="newest">Newest First</option>
+        </select>
+      </div>
+      <div class="vendors-grid results-grid" id="allVendors"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE: VENDOR PROFILE
+══════════════════════════════════════════════════════ -->
+<div id="page-profile" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="showPage('services')">← Back to Browse</button>
+    <div class="profile-layout" id="vendorProfileContent"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE: VENDOR REGISTER
+══════════════════════════════════════════════════════ -->
+<div id="page-vendor" class="page">
+  <div class="page-hero-small">
+    <div class="container">
+      <h1>Become a <span class="gradient-text">Hubmend Vendor</span></h1>
+      <p>Start earning in 24 hours — free to join</p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="vendor-form-layout">
+      <div class="vendor-form-card">
+        <h2>Create Your Professional Profile</h2>
+
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" class="form-input" placeholder="Your full name" id="vName" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" class="form-input" placeholder="03XX-XXXXXXX" id="vPhone" />
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" class="form-input" placeholder="your@email.com" id="vEmail" />
+        </div>
+        <div class="form-group">
+          <label>Service Category *</label>
+          <select class="form-input" id="vCategory">
+            <option value="">Select your category</option>
+            <option>Medical</option>
+            <option>Legal</option>
+            <option>Engineering</option>
+            <option>Home Services</option>
+            <option>Design</option>
+            <option>Education</option>
+            <option>Finance</option>
+            <option>Technology</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Your Service Title *</label>
+          <input type="text" class="form-input" placeholder="e.g. Expert Civil Engineer — 10 years exp" id="vTitle" />
+        </div>
+        <div class="form-group">
+          <label>City *</label>
+          <select class="form-input" id="vCity">
+            <option value="">Select your city</option>
+            <option>Lahore</option>
+            <option>Karachi</option>
+            <option>Islamabad</option>
+            <option>Faisalabad</option>
+            <option>Multan</option>
+            <option>Rawalpindi</option>
+            <option>Peshawar</option>
+            <option>Quetta</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Starting Price (Rs.) *</label>
+          <input type="number" class="form-input" placeholder="e.g. 2000" id="vPrice" />
+        </div>
+        <div class="form-group">
+          <label>Booking Type *</label>
+          <div class="radio-group">
+            <label><input type="radio" name="bookingType" value="fixed" checked /> Fixed Price Only</label>
+            <label><input type="radio" name="bookingType" value="bid" /> Accepts Bids</label>
+            <label><input type="radio" name="bookingType" value="both" /> Both</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>About You / Your Service *</label>
+          <textarea class="form-input" rows="4" placeholder="Describe your expertise, experience, and what makes you stand out..." id="vBio"></textarea>
+        </div>
+        <div class="form-group">
+          <label>CNIC Number (for verification) *</label>
+          <input type="text" class="form-input" placeholder="XXXXX-XXXXXXX-X" id="vCnic" />
+        </div>
+        <div class="form-group">
+          <label>Raast / Bank Account for Payments *</label>
+          <input type="text" class="form-input" placeholder="Your Raast ID or bank account" id="vPayment" />
+        </div>
+
+        <button class="btn-primary btn-large full-width" onclick="submitVendorForm()">
+          Submit for Verification →
+        </button>
+        <p class="form-note">✅ Free for first 3 months · Verified within 24 hours · Instant Raast payments</p>
+      </div>
+
+      <div class="vendor-form-side">
+        <div class="side-info-card">
+          <h3>Why Join Hubmend?</h3>
+          <div class="side-benefit">
+            <span>💰</span>
+            <div><strong>Earn More</strong><p>Set your own rates. Top vendors earn Rs. 3 lakh+/month.</p></div>
+          </div>
+          <div class="side-benefit">
+            <span>🔐</span>
+            <div><strong>Secure Payments</strong><p>Get paid instantly via Raast after every job. No chasing clients.</p></div>
+          </div>
+          <div class="side-benefit">
+            <span>⭐</span>
+            <div><strong>Build Your Brand</strong><p>Verified badge + reviews = more clients automatically.</p></div>
+          </div>
+          <div class="side-benefit">
+            <span>📱</span>
+            <div><strong>All-in-One App</strong><p>Manage bookings, chat with clients, track earnings — one app.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE: ADMIN PANEL
+══════════════════════════════════════════════════════ -->
+<div id="page-admin" class="page">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-logo">⬡ Hubmend <span>Admin</span></div>
+      <nav class="admin-nav">
+        <a href="#" class="admin-nav-item active" onclick="showAdminTab('dashboard')">📊 Dashboard</a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('vendors')">👷 Vendors</a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('customers')">👤 Customers</a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('bookings')">📋 Bookings</a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('payments')">💳 Payments</a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('disputes')">⚠️ Disputes</a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('bids')">🏷️ Bids</a>
+      </nav>
+      <button class="admin-logout" onclick="showPage('home')">← Exit Admin</button>
+    </aside>
+
+    <main class="admin-main">
+      <!-- DASHBOARD TAB -->
+      <div id="admin-dashboard" class="admin-tab active">
+        <h1 class="admin-page-title">Dashboard Overview</h1>
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">👷</div>
+            <div class="admin-stat-info">
+              <span class="admin-stat-num">1,247</span>
+              <span class="admin-stat-label">Total Vendors</span>
+            </div>
+            <span class="admin-stat-trend up">+12%</span>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">👤</div>
+            <div class="admin-stat-info">
+              <span class="admin-stat-num">8,934</span>
+              <span class="admin-stat-label">Total Customers</span>
+            </div>
+            <span class="admin-stat-trend up">+24%</span>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">📋</div>
+            <div class="admin-stat-info">
+              <span class="admin-stat-num">3,421</span>
+              <span class="admin-stat-label">Total Bookings</span>
+            </div>
+            <span class="admin-stat-trend up">+18%</span>
+          </div>
+          <div class="admin-stat-card highlight">
+            <div class="admin-stat-icon">💰</div>
+            <div class="admin-stat-info">
+              <span class="admin-stat-num">Rs. 2.6M</span>
+              <span class="admin-stat-label">Total Revenue</span>
+            </div>
+            <span class="admin-stat-trend up">+31%</span>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">⏳</div>
+            <div class="admin-stat-info">
+              <span class="admin-stat-num">47</span>
+              <span class="admin-stat-label">Pending Verifications</span>
+            </div>
+            <span class="admin-stat-trend warning">Action needed</span>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon">⚠️</div>
+            <div class="admin-stat-info">
+              <span class="admin-stat-num">8</span>
+              <span class="admin-stat-label">Open Disputes</span>
+            </div>
+            <span class="admin-stat-trend down">Needs review</span>
+          </div>
+        </div>
+
+        <div class="admin-recent">
+          <h2>Recent Bookings</h2>
+          <table class="admin-table">
+            <thead>
+              <tr><th>ID</th><th>Customer</th><th>Vendor</th><th>Service</th><th>Amount</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody id="recentBookingsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VENDORS TAB -->
+      <div id="admin-vendors" class="admin-tab">
+        <div class="admin-tab-header">
+          <h1 class="admin-page-title">Vendor Management</h1>
+          <input type="text" placeholder="Search vendors..." class="admin-search" />
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Category</th><th>City</th><th>Rating</th><th>Bookings</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="vendorsTable"></tbody>
+        </table>
+      </div>
+
+      <!-- BOOKINGS TAB -->
+      <div id="admin-bookings" class="admin-tab">
+        <h1 class="admin-page-title">All Bookings</h1>
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Customer</th><th>Vendor</th><th>Service</th><th>Date</th><th>Amount</th><th>Status</th></tr>
+          </thead>
+          <tbody id="bookingsTable"></tbody>
+        </table>
+      </div>
+
+      <!-- PAYMENTS TAB -->
+      <div id="admin-payments" class="admin-tab">
+        <h1 class="admin-page-title">Payment Management</h1>
+        <div class="payments-summary">
+          <div class="payment-summary-card">
+            <h3>In Escrow</h3>
+            <div class="payment-big">Rs. 340,000</div>
+          </div>
+          <div class="payment-summary-card">
+            <h3>Released Today</h3>
+            <div class="payment-big">Rs. 128,500</div>
+          </div>
+          <div class="payment-summary-card highlight">
+            <h3>Platform Revenue</h3>
+            <div class="payment-big">Rs. 51,300</div>
+          </div>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Transaction ID</th><th>Vendor</th><th>Amount</th><th>Platform Cut</th><th>Method</th><th>Status</th></tr>
+          </thead>
+          <tbody id="paymentsTable"></tbody>
+        </table>
+      </div>
+
+      <!-- DISPUTES TAB -->
+      <div id="admin-disputes" class="admin-tab">
+        <h1 class="admin-page-title">Dispute Resolution</h1>
+        <div class="disputes-list" id="disputesList"></div>
+      </div>
+
+      <!-- BIDS TAB -->
+      <div id="admin-bids" class="admin-tab">
+        <h1 class="admin-page-title">Active Bids</h1>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Job Title</th><th>Customer</th><th>Budget</th><th>Bids</th><th>Status</th><th>Action</th></tr>
+          </thead>
+          <tbody id="bidsTable"></tbody>
+        </table>
+      </div>
+
+      <!-- CUSTOMERS TAB -->
+      <div id="admin-customers" class="admin-tab">
+        <h1 class="admin-page-title">Customer Management</h1>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Email</th><th>City</th><th>Bookings</th><th>Joined</th><th>Status</th></tr>
+          </thead>
+          <tbody id="customersTable"></tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal-overlay" id="bookingOverlay" onclick="closeBooking()">
+  <div class="modal-box modal-large" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeBooking()">✕</button>
+    <div id="bookingContent"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Admin Login Trigger (hidden) -->
+<div style="position:fixed;bottom:10px;right:10px;opacity:0.1;font-size:10px;cursor:pointer" onclick="checkAdminAccess()">admin</div>
+
+<script src="scripts/data.js"></script>
+<script src="scripts/app.js"></script>
+</body>
+</html>
